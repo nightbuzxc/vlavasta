@@ -33,12 +33,14 @@
 
                         <ul class="lang-list">
                             <?php foreach ($languages as $slug => $lang): ?>
+                                <?php if ($slug !== $current_lang_slug): // Не показувати поточну мову в списку ?>
                                 <li>
                                     <a href="<?php echo esc_url($lang['url']); ?>">
                                         <img src="<?php echo esc_url($lang['flag']); ?>" alt="<?php echo esc_attr($lang['name']); ?>"> 
                                         <?php echo esc_html($lang['name']); ?>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; 
@@ -47,34 +49,22 @@
 
             <div class="header-icons">
 
-                <a href="https://www.instagram.com/vlavasta_nk/" class="icon-link">
+                <a href="https://www.instagram.com/vlavasta_nk/" class="icon-link" target="_blank">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
                 
-                <div class="cart-icon-wrapper" id="cartBtn">
+                <?php 
+                    $cart_count = WC()->cart->get_cart_contents_count(); 
+                    $cart_url = wc_get_cart_url();
+                ?>
+                <a href="<?php echo esc_url($cart_url); ?>" class="cart-icon-wrapper" id="cartBtn">
                     <i class="fa-solid fa-bag-shopping"></i>
-                    <span class="cart-count">0</span>
-                    
-                    <div class="cart-dropdown" id="cartDropdown">
-                        <div class="cart-title">
-                            <?php if(function_exists('pll_e')) { pll_e('Кошик'); } else { echo 'Кошик'; } ?>
-                        </div>
-                        <ul class="cart-list"></ul>
-                        <div class="cart-empty-msg">
-                            <?php if(function_exists('pll_e')) { pll_e('Кошик порожній'); } else { echo 'Кошик порожній'; } ?>
-                        </div>
-                        <div class="cart-footer">
-                            <div class="cart-divider"></div>
-                            <div class="total-row">
-                                <span><?php if(function_exists('pll_e')) { pll_e('Разом'); } else { echo 'Разом'; } ?>:</span>
-                                <span class="total-price">0 грн</span>
-                            </div>
-                            <button class="btn-checkout">
-                                <?php if(function_exists('pll_e')) { pll_e('Оформити'); } else { echo 'Оформити'; } ?>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    <?php if ($cart_count > 0): ?>
+                        <span class="cart-count visible"><?php echo esc_html($cart_count); ?></span>
+                    <?php else: ?>
+                        <span class="cart-count">0</span>
+                    <?php endif; ?>
+                </a>
 
                 <div class="user-menu-container">
                     <div class="user-icon-trigger" id="userMenuBtn">
@@ -84,52 +74,36 @@
                     <div class="user-dropdown-menu" id="userMenuDropdown">
                         <?php if (is_user_logged_in()): 
                             $current_user = wp_get_current_user();
+                            $my_account_url = get_permalink( get_option('woocommerce_myaccount_page_id') );
                         ?>
                             <div class="user-drop-header">
-                                <?php if(function_exists('pll_e')) { pll_e('Привіт'); } else { echo 'Привіт'; } ?>, <?php echo esc_html($current_user->display_name); ?>
+                                Привіт, <strong><?php echo esc_html( !empty($current_user->first_name) ? $current_user->first_name : $current_user->display_name ); ?></strong>
                             </div>
                             
-                            <a href="<?php echo home_url('/' . (function_exists('pll__') ? pll__('my-account') : 'my-account')); ?>" class="user-drop-link">
+                            <a href="<?php echo esc_url($my_account_url); ?>" class="user-drop-link">
                                 <span class="icon-wrap"><i class="fa-solid fa-box-open"></i></span>
-                                <span><?php if(function_exists('pll_e')) { pll_e('Мій кабінет'); } else { echo 'Мій кабінет'; } ?></span>
+                                <span>Мій кабінет</span>
                             </a>
                             
-                            <a href="#" class="user-drop-link open-fav-from-menu">
+                            <a href="#" class="user-drop-link js-open-fav-modal">
                                 <span class="icon-wrap"><i class="fa-regular fa-heart"></i></span>
-                                <span><?php if(function_exists('pll_e')) { pll_e('Вподобане'); } else { echo 'Вподобане'; } ?></span>
-                                <span class="fav-count-inline"></span>
+                                <span>Вподобане</span>
+                                <span class="fav-count-badge">0</span> 
                             </a>
 
-                            <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                            <div class="user-drop-divider"></div>
 
-                            <a href="<?php echo home_url('?action=logout'); ?>" class="user-drop-link logout">
+                            <a href="<?php echo wp_logout_url(home_url()); ?>" class="user-drop-link logout">
                                 <span class="icon-wrap"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
-                                <span><?php if(function_exists('pll_e')) { pll_e('Вийти'); } else { echo 'Вийти'; } ?></span>
+                                <span>Вийти</span>
                             </a>
                         <?php else: ?>
-                            <a href="<?php echo home_url('/' . (function_exists('pll__') ? pll__('my-account') : 'my-account')); ?>" class="user-drop-link">
+                            <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="user-drop-link">
                                 <span class="icon-wrap"><i class="fa-regular fa-user"></i></span>
-                                <span><?php if(function_exists('pll_e')) { pll_e('Вхід / Реєстрація'); } else { echo 'Вхід / Реєстрація'; } ?></span>
+                                <span>Вхід / Реєстрація</span>
                             </a>
                         <?php endif; ?>
                     </div>
-
-                    <div class="favorites-dropdown" id="favDropdown">
-                        <div class="fav-header-nav">
-                            <span class="back-to-menu-btn">
-                                <i class="fa-solid fa-chevron-left"></i> 
-                                <?php if(function_exists('pll_e')) { pll_e('Назад'); } else { echo 'Назад'; } ?>
-                            </span>
-                            <span class="fav-header-title"><?php if(function_exists('pll_e')) { pll_e('Вподобане'); } else { echo 'Вподобане'; } ?></span>
-                        </div>
-                        
-                        <ul class="fav-list"></ul>
-                        
-                        <div class="fav-empty-msg">
-                            <?php if(function_exists('pll_e')) { pll_e('Список порожній'); } else { echo 'Список порожній'; } ?>
-                        </div>
-                    </div>
-
                 </div>
 
             </div> 

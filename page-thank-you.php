@@ -2,85 +2,112 @@
 /* Template Name: Thank You Page */
 get_header();
 
-// Отримуємо технічний ID (щоб знайти замовлення в базі)
+// Функція-хелпер для перекладу
+if (!function_exists('vlavasta_t')) {
+    function vlavasta_t($string) {
+        if (function_exists('pll__')) {
+            return pll__($string);
+        }
+        return $string;
+    }
+}
+
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 $order_post = get_post($order_id);
+$is_valid_order = ($order_post && $order_post->post_type === 'shop_order');
 
-$visual_order_number = ''; // Змінна для красивого номера
-
-// Перевірка, чи існує таке замовлення
-if ($order_post && $order_post->post_type === 'shop_order') {
-    $client_name = get_post_meta($order_id, 'order_client_name', true);
-    $total = get_post_meta($order_id, 'order_total', true);
-    $payment_method = get_post_meta($order_id, 'payment_method', true);
-    
-    // Спробуємо дістати наш красивий номер (1, 2, 3...)
-    $visual_order_number = get_post_meta($order_id, 'custom_order_number', true);
-    
-    // Якщо це старе замовлення і в нього немає красивого номера, покажемо звичайний ID
-    if (empty($visual_order_number)) {
-        $visual_order_number = $order_id;
-    }
-} else {
-    $order_id = 0; // Некоректне замовлення
-}
+// Отримуємо метадані
+$payment_status = get_post_meta($order_id, 'payment_status', true);
+$order_status = get_post_meta($order_id, 'order_status', true);
 ?>
 
-<div class="container" style="padding: 60px 20px; text-align: center;">
+<div class="container" style="padding: 80px 20px; text-align: center;">
     
-    <?php if ($order_id): ?>
-        <div class="thank-you-box" style="max-width: 600px; margin: 0 auto;">
-            <i class="fa-regular fa-circle-check" style="font-size: 80px; color: #6BCFB8; margin-bottom: 20px;"></i>
+    <?php if ($is_valid_order): 
+        $order_num = get_post_meta($order_id, 'custom_order_number', true);
+        $total = get_post_meta($order_id, 'order_total', true);
+        $payment_method = get_post_meta($order_id, 'payment_method', true);
+    ?>
+
+        <?php if ($payment_status === 'paid' || $payment_method !== 'card_online'): ?>
             
-            <h1 style="font-size: 32px; margin-bottom: 15px;">
-                <?php if(function_exists('pll_e')) { pll_e('Дякуємо за замовлення!'); } else { echo 'Дякуємо за замовлення!'; } ?>
+            <div style="font-size: 60px; color: #57bfa3; margin-bottom: 20px;">
+                <i class="fa-regular fa-circle-check"></i>
+            </div>
+            
+            <h1 class="section-title" style="margin-bottom: 10px;">
+                <?php echo vlavasta_t('Дякуємо за замовлення!'); ?>
             </h1>
             
-            <p style="font-size: 18px; color: #555; margin-bottom: 30px;">
-                <?php echo esc_html($client_name); ?>, 
-                <?php if(function_exists('pll_e')) { pll_e('ваше замовлення'); } else { echo 'ваше замовлення'; } ?> 
-                <strong>#<?php echo $visual_order_number; ?></strong> 
-                <?php if(function_exists('pll_e')) { pll_e('успішно прийнято.'); } else { echo 'успішно прийнято.'; } ?>
+            <p style="font-size: 18px; color: #333; margin-bottom: 30px;">
+                <?php echo vlavasta_t('Ваше замовлення'); ?> 
+                <b>#<?php echo esc_html($order_num); ?></b> 
+                <?php echo vlavasta_t('успішно прийнято.'); ?>
             </p>
 
-            <div class="order-summary" style="background: #FFFBF2; padding: 30px; border-radius: 12px; border: 1px solid #eee; text-align: left;">
-                <h3 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">
-                    <?php if(function_exists('pll_e')) { pll_e('Деталі:'); } else { echo 'Деталі:'; } ?>
+            <div style="background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 30px; max-width: 500px; margin: 0 auto; text-align: left; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                <h3 style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; font-size: 18px; color: #634343;">
+                    <?php echo vlavasta_t('Деталі:'); ?>
                 </h3>
                 
-                <p><strong><?php if(function_exists('pll_e')) { pll_e('Номер замовлення:'); } else { echo 'Номер замовлення:'; } ?></strong> #<?php echo $visual_order_number; ?></p>
-                
-                <p><strong><?php if(function_exists('pll_e')) { pll_e('Сума до сплати:'); } else { echo 'Сума до сплати:'; } ?></strong> <span style="font-weight: bold; color: #E8A6A6; font-size: 18px;"><?php echo $total; ?></span></p>
-                
-                <p><strong><?php if(function_exists('pll_e')) { pll_e('Спосіб оплати:'); } else { echo 'Спосіб оплати:'; } ?></strong> 
-                    <?php 
-                    if ($payment_method == 'cod') {
-                        echo function_exists('pll__') ? pll__('Накладений платіж') : 'Накладений платіж';
-                    } elseif ($payment_method == 'liqpay') {
-                        echo function_exists('pll__') ? pll__('Картою онлайн (LiqPay)') : 'Картою онлайн (LiqPay)';
-                    } else {
-                        echo $payment_method;
-                    }
-                    ?>
-                </p>
-                
-                <p style="margin-top: 20px; font-size: 14px; color: #888;">
-                    <?php if(function_exists('pll_e')) { pll_e('Ми також надіслали лист із деталями на вашу електронну пошту. Менеджер зв\'яжеться з вами найближчим часом для підтвердження.'); } else { echo 'Ми також надіслали лист із деталями на вашу електронну пошту. Менеджер зв\'яжеться з вами найближчим часом для підтвердження.'; } ?>
-                </p>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: #777;"><?php echo vlavasta_t('Номер замовлення:'); ?></span>
+                    <span style="font-weight: bold;">#<?php echo esc_html($order_num); ?></span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: #777;"><?php echo vlavasta_t('Сума до сплати:'); ?></span>
+                    <span style="font-weight: bold; color: #57bfa3; font-size: 18px;"><?php echo esc_html($total); ?> Zł</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: #777;"><?php echo vlavasta_t('Статус оплати:'); ?></span>
+                    <?php if($payment_status === 'paid'): ?>
+                        <span style="color: #57bfa3; font-weight: bold;"><?php echo vlavasta_t('Оплачено'); ?></span>
+                    <?php else: ?>
+                        <span style="color: #f39c12; font-weight: bold;"><?php echo vlavasta_t('Оплата при отриманні'); ?></span>
+                    <?php endif; ?>
+                </div>
             </div>
 
-            <a href="<?php echo home_url(); ?>" class="btn-checkout" style="display: inline-block; margin-top: 30px; text-decoration: none; width: auto; padding: 15px 40px;">
-                <?php if(function_exists('pll_e')) { pll_e('Повернутися на головну'); } else { echo 'Повернутися на головну'; } ?>
+            <p style="margin-top: 30px; color: #888; font-size: 14px;">
+                <?php echo vlavasta_t('Ми також надіслали лист із деталями на вашу електронну пошту.'); ?>
+            </p>
+
+        <?php elseif ($payment_status === 'failed'): ?>
+            
+            <div style="font-size: 60px; color: #e74c3c; margin-bottom: 20px;">
+                <i class="fa-regular fa-circle-xmark"></i>
+            </div>
+            
+            <h1 class="section-title" style="margin-bottom: 10px;"><?php echo vlavasta_t('Оплата не пройшла'); ?></h1>
+            <p style="margin-bottom: 30px;"><?php echo vlavasta_t('На жаль, сталася помилка при оплаті карткою.'); ?></p>
+            
+            <a href="<?php echo home_url('/checkout/'); ?>" class="btn-checkout" style="display: inline-block; width: auto; padding: 12px 30px;">
+                <?php echo vlavasta_t('Спробувати ще раз'); ?>
             </a>
-        </div>
+
+        <?php else: ?>
+            <div style="font-size: 60px; color: #f39c12; margin-bottom: 20px;">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <h1 class="section-title"><?php echo vlavasta_t('Перевірка платежу...'); ?></h1>
+            <p><?php echo vlavasta_t('Будь ласка, зачекайте, ми перевіряємо статус вашої оплати.'); ?></p>
+            <script>setTimeout(function(){ window.location.reload(); }, 3000);</script>
+        <?php endif; ?>
 
     <?php else: ?>
-        <h1><?php if(function_exists('pll_e')) { pll_e('Помилка'); } else { echo 'Помилка'; } ?></h1>
-        <p><?php if(function_exists('pll_e')) { pll_e('Замовлення не знайдено.'); } else { echo 'Замовлення не знайдено.'; } ?></p>
-        <a href="<?php echo home_url(); ?>" class="btn-checkout" style="display: inline-block; width: auto;">
-            <?php if(function_exists('pll_e')) { pll_e('На головну'); } else { echo 'На головну'; } ?>
+        <h1><?php echo vlavasta_t('Замовлення не знайдено.'); ?></h1>
+        <a href="<?php echo home_url(); ?>" class="btn-checkout" style="display: inline-block; width: auto; padding: 12px 30px; margin-top: 20px;">
+            <?php echo vlavasta_t('На головну'); ?>
         </a>
     <?php endif; ?>
+
+    <div style="margin-top: 50px;">
+        <a href="<?php echo home_url(); ?>" style="text-decoration: none; color: #E8A6A6; font-weight: bold;">
+            <i class="fa-solid fa-arrow-left"></i> <?php echo vlavasta_t('Повернутися на головну'); ?>
+        </a>
+    </div>
 
 </div>
 

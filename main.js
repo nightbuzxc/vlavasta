@@ -1,465 +1,267 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const strings = (typeof vlavasta_globals !== 'undefined' && vlavasta_globals.strings) ? vlavasta_globals.strings : {
-        alert_empty: 'Ваш кошик порожній!',
-        cart_empty_text: 'Кошик порожній',
-        nova_poshta: 'Нова Пошта',
-        ukrposhta: 'Укрпошта',
-        inpost: 'InPost (Paczkomat)',
-        dpd: 'DPD Courier',
-        poczta_polska: 'Poczta Polska',
-        ua_branch_label: 'Номер відділення або адреса *',
-        ua_placeholder: 'Наприклад: Відділення №1, м. Рівне',
-        pl_branch_label: 'Адреса доставки / Номер поштомату *',
-        pl_placeholder: 'Вулиця, будинок або код Paczkomat'
-    };
+    /* =========================================
+       1. ЛОГІКА ВПОДОБАНОГО
+       ========================================= */
+    const wishlistKey = 'vlavasta_wishlist_v1';
 
-    const track = document.querySelector('.slider-track');
-    const nextBtn = document.querySelector('.next-btn');
-    const prevBtn = document.querySelector('.prev-btn');
-
-    // Кнопки та меню
-    const cartBtn = document.getElementById('cartBtn');
-    const cartDropdown = document.getElementById('cartDropdown');
-    
-    const userMenuBtn = document.getElementById('userMenuBtn');
-    const userMenuDropdown = document.getElementById('userMenuDropdown');
-    const menuFavBtn = document.querySelector('.open-fav-from-menu'); // Кнопка "Вподобане" в меню
-    
-    const favDropdown = document.getElementById('favDropdown');
-    const backToMenuBtn = document.querySelector('.back-to-menu-btn'); // Кнопка "Назад"
-    const favList = document.querySelector('.fav-list');
-    const favCountInline = document.querySelector('.fav-count-inline');
-    const favEmptyMsg = document.querySelector('.fav-empty-msg');
-
-    const buyButtons = document.querySelectorAll('.btn-buy');
-    const cartList = document.querySelector('.cart-list');
-    const cartCount = document.querySelector('.cart-count');
-    const cartEmptyMsg = document.querySelector('.cart-empty-msg');
-    const cartTotalEl = document.querySelector('.total-price');
-    const cartFooter = document.querySelector('.cart-footer');
-    const checkoutBtn = document.querySelector('.btn-checkout');
-
-    // --- ЛОГІКА ІНТЕРФЕЙСУ (МЕНЮ) ---
-
-    // 1. Кошик (клік)
-    if (cartBtn && cartDropdown) {
-        cartBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            cartDropdown.classList.toggle('active');
-            
-            // Закриваємо інші меню
-            if (userMenuDropdown) userMenuDropdown.classList.remove('active');
-            if (favDropdown) favDropdown.classList.remove('active');
-        });
+    function getWishlist() {
+        return JSON.parse(localStorage.getItem(wishlistKey)) || [];
     }
 
-    // 2. Головне меню користувача (клік на людину)
-    if (userMenuBtn && userMenuDropdown) {
-        userMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Якщо відкрито вподобане - закриваємо його
-            if (favDropdown) favDropdown.classList.remove('active');
-            
-            userMenuDropdown.classList.toggle('active');
-            
-            // Закриваємо кошик
-            if (cartDropdown) cartDropdown.classList.remove('active');
-        });
+    function saveWishlist(list) {
+        localStorage.setItem(wishlistKey, JSON.stringify(list));
+        updateHeartIcons(); 
+        updateWishlistBadge(); 
     }
 
-    // 3. Перехід Меню -> Вподобане
-    if (menuFavBtn && favDropdown && userMenuDropdown) {
-        menuFavBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            userMenuDropdown.classList.remove('active'); // Ховаємо меню
-            favDropdown.classList.add('active');         // Показуємо список
-        });
+    function toggleWishlist(product) {
+        let list = getWishlist();
+        const existingIndex = list.findIndex(item => item.id === product.id);
+
+        if (existingIndex > -1) {
+            list.splice(existingIndex, 1);
+        } else {
+            list.push(product);
+        }
+        saveWishlist(list);
     }
 
-    // 4. Кнопка "Назад" (Вподобане -> Меню)
-    if (backToMenuBtn && favDropdown && userMenuDropdown) {
-        backToMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            favDropdown.classList.remove('active');      // Ховаємо список
-            userMenuDropdown.classList.add('active');    // Показуємо меню
-        });
-    }
+    function updateWishlistBadge() {
+        const list = getWishlist();
+        const count = list.length;
+        const badges = document.querySelectorAll('.fav-count-badge');
 
-    // 5. Закриття при кліку повз
-    document.addEventListener('click', (e) => {
-        // Кошик
-        if (cartDropdown && cartDropdown.classList.contains('active')) {
-            if (!cartDropdown.contains(e.target) && !cartBtn.contains(e.target)) {
-                cartDropdown.classList.remove('active');
+        badges.forEach(badge => {
+            badge.innerText = count;
+            if (count > 0) {
+                badge.classList.add('visible');
+            } else {
+                badge.classList.remove('visible');
             }
-        }
-        
-        // Меню (обидва вікна в одному контейнері)
-        const isClickInsideMenu = userMenuDropdown && userMenuDropdown.contains(e.target);
-        const isClickInsideFav = favDropdown && favDropdown.contains(e.target);
-        const isClickOnUserBtn = userMenuBtn && userMenuBtn.contains(e.target);
-
-        // Якщо клік не в меню, не в списку і не на кнопці
-        if (!isClickInsideMenu && !isClickInsideFav && !isClickOnUserBtn) {
-            if (userMenuDropdown) userMenuDropdown.classList.remove('active');
-            if (favDropdown) favDropdown.classList.remove('active');
-        }
-    });
-
-    // --- ДАНІ ТА ФУНКЦІОНАЛ ---
-    function loadData(key) {
-        try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
+        });
     }
 
-    let favorites = loadData('vlavasta_favorites');
-    let cart = loadData('vlavasta_cart');
-
-    // Фільтрація сміття
-    cart = cart.filter(item => item.id && item.title && !isNaN(parseFloat(item.priceVal)));
-    localStorage.setItem('vlavasta_cart', JSON.stringify(cart));
-
-    function updateFavUI() {
-        if (favCountInline) {
-            favCountInline.textContent = favorites.length > 0 ? favorites.length : '';
-        }
-        if (favEmptyMsg) favEmptyMsg.style.display = favorites.length > 0 ? 'none' : 'block';
-
-        const favButtons = document.querySelectorAll('.btn-fav');
-        favButtons.forEach(btn => {
-            const id = btn.getAttribute('data-id');
-            const isLiked = favorites.some(item => item.id == id);
-            const icon = btn.querySelector('i');
-            if (isLiked) {
+    function updateHeartIcons() {
+        const list = getWishlist();
+        const ids = list.map(item => item.id.toString());
+        
+        document.querySelectorAll('.btn-fav').forEach(btn => {
+            let id = btn.getAttribute('data-id');
+            if (!id) {
+                const buyBtn = btn.parentElement.querySelector('.btn-buy');
+                if (buyBtn && buyBtn.getAttribute('href').includes('add-to-cart=')) {
+                    id = buyBtn.getAttribute('href').split('add-to-cart=')[1];
+                }
+            }
+            if (id && ids.includes(id)) {
                 btn.classList.add('liked');
-                if (icon) { icon.classList.remove('fa-regular'); icon.classList.add('fa-solid'); }
+                btn.querySelector('i').classList.remove('fa-regular');
+                btn.querySelector('i').classList.add('fa-solid');
+                btn.style.borderColor = '#e74c3c';
+                btn.style.color = '#e74c3c';
             } else {
                 btn.classList.remove('liked');
-                if (icon) { icon.classList.remove('fa-solid'); icon.classList.add('fa-regular'); }
-            }
-        });
-        renderFavList();
-    }
-
-    function renderFavList() {
-        if (!favList) return;
-        favList.innerHTML = '';
-        favorites.forEach(item => {
-            const li = document.createElement('li');
-            li.classList.add('fav-item');
-            li.innerHTML = `
-                <a href="${item.link || '#'}" class="fav-img-link"><img src="${item.img || ''}" alt="${item.title}"></a>
-                <div class="fav-info">
-                    <a href="${item.link || '#'}" class="fav-title">${item.title}</a>
-                    <div class="fav-price">${item.price}</div>
-                </div>
-                <div class="fav-remove-btn" data-id="${item.id}"><i class="fa-regular fa-trash-can"></i></div>
-            `;
-            favList.appendChild(li);
-        });
-    }
-
-    // Видалення з вподобаного
-    if (favList) {
-        favList.addEventListener('click', (e) => {
-            const removeBtn = e.target.closest('.fav-remove-btn');
-            if (removeBtn) {
-                e.stopPropagation();
-                const id = removeBtn.getAttribute('data-id');
-                favorites = favorites.filter(item => item.id != id);
-                localStorage.setItem('vlavasta_favorites', JSON.stringify(favorites));
-                updateFavUI();
+                btn.querySelector('i').classList.add('fa-regular');
+                btn.querySelector('i').classList.remove('fa-solid');
+                btn.style.borderColor = '';
+                btn.style.color = '';
             }
         });
     }
 
-    // Додавання в вподобане (Глобальний)
-    document.addEventListener('click', (e) => {
+    document.body.addEventListener('click', function(e) {
         const btn = e.target.closest('.btn-fav');
-        if (btn) {
-            e.preventDefault();
-            const product = {
-                id: btn.getAttribute('data-id'),
-                title: btn.getAttribute('data-title'),
-                price: btn.getAttribute('data-price'),
-                img: btn.getAttribute('data-img'),
-                link: btn.getAttribute('data-link')
-            };
-            const index = favorites.findIndex(item => item.id == product.id);
-            if (index === -1) favorites.push(product);
-            else favorites.splice(index, 1);
-            localStorage.setItem('vlavasta_favorites', JSON.stringify(favorites));
-            updateFavUI();
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        let id = btn.getAttribute('data-id');
+        if (!id) {
+             const card = btn.closest('.product-card');
+             if(card) {
+                 const buy = card.querySelector('.btn-buy');
+                 if(buy) id = buy.href.split('add-to-cart=')[1];
+             }
+        }
+        if (id) {
+            toggleWishlist({ id: id.toString(), title: 'Item', price: '', img: '', link: '' });
         }
     });
 
-    // --- КОШИК ---
-    function updateCartUI() {
-        const totalQty = cart.reduce((acc, item) => acc + (item.qty || 0), 0);
-        if (cartCount) {
-            cartCount.textContent = totalQty;
-            cartCount.classList.toggle('visible', totalQty > 0);
-        }
-        if (cartEmptyMsg) cartEmptyMsg.style.display = totalQty > 0 ? 'none' : 'block';
-        if (cartFooter) cartFooter.style.display = totalQty > 0 ? 'block' : 'none';
-        renderCartList();
-    }
+    updateHeartIcons();
+    updateWishlistBadge();
 
-    function renderCartList() {
-        if (!cartList) return;
-        cartList.innerHTML = '';
-        let totalPrice = 0;
-        let currencySymbol = 'Zł';
+    /* =========================================
+       2. МОДАЛЬНЕ ВІКНО ВПОДОБАНОГО
+       ========================================= */
+    const favModal = document.getElementById('fav-modal-overlay');
+    const openFavBtns = document.querySelectorAll('.js-open-fav-modal');
+    const closeFavBtn = document.getElementById('close-fav-btn');
+    const closeActionBtns = document.querySelectorAll('.close-modal-action');
+    const favContainer = document.getElementById('fav-list-container');
 
-        cart.forEach(item => {
-            const rawPrice = parseFloat(item.priceVal);
-            const safePrice = isNaN(rawPrice) ? 0 : rawPrice;
-            const safeQty = item.qty || 1;
-            totalPrice += safePrice * safeQty;
-            if (item.currency) currencySymbol = item.currency;
-
-            const li = document.createElement('li');
-            li.classList.add('cart-item');
-            li.innerHTML = `
-                <a href="${item.link || '#'}"><img src="${item.img || ''}" alt="${item.title}"></a>
-                <div class="cart-info">
-                    <a href="${item.link || '#'}" class="cart-title">${item.title}</a>
-                    <div class="cart-price">${safePrice} ${currencySymbol}</div>
-                </div>
-                <div class="qty-controls">
-                    <button class="qty-btn minus" data-id="${item.id}">-</button>
-                    <span class="qty-val">${safeQty}</span>
-                    <button class="qty-btn plus" data-id="${item.id}">+</button>
+    window.renderFavModal = function() {
+        if(!favContainer) return;
+        const list = getWishlist();
+        favContainer.innerHTML = '';
+        if (list.length === 0) {
+            favContainer.innerHTML = `
+                <div style="text-align:center; padding: 40px; color: #999;">
+                    <i class="fa-regular fa-heart" style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <p>Список порожній</p>
                 </div>
             `;
-            cartList.appendChild(li);
-        });
-        if (cartTotalEl) cartTotalEl.textContent = totalPrice.toFixed(2) + ' ' + currencySymbol;
-    }
-
-    if (cartList) {
-        cartList.addEventListener('click', (e) => {
-            const btn = e.target.closest('.qty-btn');
-            if (!btn) return;
-            e.stopPropagation();
-            const id = btn.getAttribute('data-id');
-            const itemIndex = cart.findIndex(item => item.id == id);
-            if (itemIndex > -1) {
-                if (btn.classList.contains('plus')) cart[itemIndex].qty++;
-                else if (btn.classList.contains('minus')) {
-                    cart[itemIndex].qty--;
-                    if (cart[itemIndex].qty <= 0) cart.splice(itemIndex, 1);
-                }
-                localStorage.setItem('vlavasta_cart', JSON.stringify(cart));
-                updateCartUI();
-            }
-        });
-    }
-
-    // Додавання в кошик (Глобальний)
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-buy');
-        if (btn) {
-            e.preventDefault();
-            const rawPrice = btn.getAttribute('data-price-val');
-            const safePrice = parseFloat(rawPrice) || 0;
-            const id = btn.getAttribute('data-id');
-            if (!id) return;
-
-            const product = {
-                id: id,
-                title: btn.getAttribute('data-title'),
-                priceVal: safePrice,
-                currency: btn.getAttribute('data-currency') || 'Zł',
-                img: btn.getAttribute('data-img'),
-                link: btn.getAttribute('data-link'),
-                qty: 1
-            };
-            const existingItem = cart.find(item => item.id == product.id);
-            if (existingItem) existingItem.qty++;
-            else cart.push(product);
-
-            localStorage.setItem('vlavasta_cart', JSON.stringify(cart));
-            updateCartUI();
-            
-            // Відкрити кошик
-            if (cartDropdown) {
-                cartDropdown.classList.add('active');
-                if (userMenuDropdown) userMenuDropdown.classList.remove('active');
-                if (favDropdown) favDropdown.classList.remove('active');
-            }
+            return;
         }
-    });
-
-    // Checkout redirect
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', function(e) {
-            if (cart.length === 0) {
-                e.preventDefault();
-                alert(strings.alert_empty); 
-                return;
-            }
-            const url = (typeof vlavasta_globals !== 'undefined' && vlavasta_globals.checkout_url) 
-                        ? vlavasta_globals.checkout_url : '/checkout/';
-            window.location.href = url;
-        });
-    }
-
-    // Checkout page logic...
-    const countrySelect = document.getElementById('country-select');
-    const carrierBlock = document.getElementById('carrier-block');
-    const carrierSelect = document.getElementById('carrier-select');
-    const branchBlock = document.getElementById('branch-block');
-    const branchLabel = document.getElementById('branch-label');
-    const branchInput = document.querySelector('input[name="billing_address"]');
-    const phoneInput = document.querySelector('input[name="billing_phone"]');
-    const checkoutItemsList = document.getElementById('checkout-items-list');
-    const checkoutTotalPrice = document.getElementById('checkout-total-price');
-    const cartDataInput = document.getElementById('cart-data-input');
-
-    if (checkoutItemsList) {
-        // Рендер чекауту
-        if (cart.length === 0) {
-            checkoutItemsList.innerHTML = `<p>${strings.cart_empty_text}</p>`;
-            if(checkoutTotalPrice) checkoutTotalPrice.textContent = '0';
-        } else {
-            checkoutItemsList.innerHTML = '';
-            let total = 0;
-            let currency = 'Zł';
-            cart.forEach(item => {
-                const price = parseFloat(item.priceVal) || 0;
-                const qty = item.qty || 1;
-                const sum = price * qty;
-                total += sum;
-                if(item.currency) currency = item.currency;
-                checkoutItemsList.innerHTML += `
-                    <div class="checkout-item">
-                        <img src="${item.img}" alt="${item.title}">
-                        <div class="checkout-item-info">
-                            <div class="ch-title">${item.title}</div>
-                            <div class="ch-meta">
-                                <span>x${qty}</span>
-                                <span class="ch-price">${sum} ${currency}</span>
-                            </div>
+        list.forEach(item => {
+            const row = document.createElement('div');
+            row.innerHTML = `
+                <div style="display:flex; align-items:center; gap:15px; width:100%;">
+                    <a href="${item.link}" style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: #f9f9f9;">
+                        <img src="${item.img}" style="width:100%; height:100%; object-fit:cover;">
+                    </a>
+                    <div style="flex-grow: 1;">
+                        <a href="${item.link}" style="font-weight: 600; color: #333; text-decoration: none; display: block; line-height: 1.2;">
+                            ${item.title}
+                        </a>
+                        <div style="color: #6BCFB8; font-weight: 700; font-size: 14px; margin-top: 5px;">
+                            ${item.price}
                         </div>
                     </div>
-                `;
+                    <button class="remove-fav-btn" data-id="${item.id}" style="border: none; background: #fff0f0; color: #e74c3c; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; flex-shrink: 0;">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            favContainer.appendChild(row);
+        });
+        document.querySelectorAll('.remove-fav-btn').forEach(delBtn => {
+            delBtn.addEventListener('click', (e) => {
+                const idToRemove = e.currentTarget.getAttribute('data-id');
+                let currentList = getWishlist();
+                currentList = currentList.filter(p => p.id !== idToRemove);
+                saveWishlist(currentList);
+                renderFavModal();
             });
-            if (checkoutTotalPrice) checkoutTotalPrice.textContent = total.toFixed(2) + ' ' + currency;
-            if (cartDataInput) cartDataInput.value = JSON.stringify(cart);
+        });
+    }
+
+    openFavBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderFavModal();
+            if(favModal) {
+                favModal.style.display = 'flex';
+                setTimeout(() => favModal.classList.add('open'), 10);
+                document.body.style.overflow = 'hidden';
+                const userMenu = document.getElementById('userMenuDropdown');
+                if(userMenu) userMenu.classList.remove('active');
+            }
+        });
+    });
+
+    function closeMyModal() {
+        if(favModal) {
+            favModal.classList.remove('open');
+            setTimeout(() => { favModal.style.display = 'none'; }, 300);
+            document.body.style.overflow = '';
         }
     }
 
-    if (countrySelect && carrierSelect) {
-        const carriersData = {
-            'UA': [ { val: 'nova_poshta', label: strings.nova_poshta }, { val: 'ukrposhta', label: strings.ukrposhta } ],
-            'PL': [ { val: 'inpost', label: strings.inpost }, { val: 'dpd', label: strings.dpd }, { val: 'poczta_polska', label: strings.poczta_polska } ]
-        };
-        const prefixes = { 'UA': '+380', 'PL': '+48' };
+    if(closeFavBtn) closeFavBtn.addEventListener('click', closeMyModal);
+    closeActionBtns.forEach(b => b.addEventListener('click', closeMyModal));
+    if(favModal) {
+        favModal.addEventListener('click', (e) => {
+            if (e.target === favModal) closeMyModal();
+        });
+    }
 
-        countrySelect.addEventListener('change', function() {
-            const country = this.value;
-            carrierSelect.innerHTML = '';
-            if (country && carriersData[country]) {
-                carrierBlock.style.display = 'block';
-                branchBlock.style.display = 'block';
-                carriersData[country].forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c.val; opt.textContent = c.label;
-                    carrierSelect.appendChild(opt);
-                });
-                if (country === 'UA') {
-                     if(branchLabel) branchLabel.textContent = strings.ua_branch_label;
-                     if(branchInput) branchInput.placeholder = strings.ua_placeholder;
-                } else {
-                     if(branchLabel) branchLabel.textContent = strings.pl_branch_label;
-                     if(branchInput) branchInput.placeholder = strings.pl_placeholder;
-                }
-                if (phoneInput) phoneInput.value = prefixes[country] || '';
-            } else {
-                carrierBlock.style.display = 'none';
-                branchBlock.style.display = 'none';
+    /* =========================================
+       3. СТАРІ СКРИПТИ
+       ========================================= */
+    const track = document.querySelector('.slider-track');
+    if(track) {
+        let idx = 0; const slides = document.querySelectorAll('.hero .slide');
+        const nextBtn = document.querySelector('.next-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        if(nextBtn) nextBtn.addEventListener('click', () => { idx = (idx+1)%slides.length; track.style.transform=`translateX(-${idx*100}%)`; });
+        if(prevBtn) prevBtn.addEventListener('click', () => { idx = (idx-1+slides.length)%slides.length; track.style.transform=`translateX(-${idx*100}%)`; });
+    }
+    
+    const userBtn = document.getElementById('userMenuBtn');
+    if(userBtn) userBtn.addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('userMenuDropdown').classList.toggle('active'); });
+    const langBtn = document.querySelector('.lang-dropdown');
+    if(langBtn) langBtn.addEventListener('click', (e) => { e.stopPropagation(); document.querySelector('.lang-dropdown').classList.toggle('active'); });
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+    });
+});
+
+/* =========================================
+   QUANTITY BUTTONS & REMOVE FIX
+   ========================================= */
+jQuery(document).ready(function($) {
+    
+    // Функція оновлення кошика
+    function updateCart() {
+         $("[name='update_cart']").prop("disabled", false).trigger("click");
+    }
+
+    // 1. Додавання кнопок +/-
+    function initQtyButtons() {
+        $('.woocommerce-cart .quantity input.qty').each(function() {
+            var $input = $(this);
+            if ($input.parent('.quantity-wrapper').length === 0 && $input.siblings('.plus').length === 0) {
+                $input.wrap('<div class="quantity-wrapper"></div>');
+                $input.before('<button type="button" class="minus">-</button>');
+                $input.after('<button type="button" class="plus">+</button>');
             }
         });
+    }
+
+    initQtyButtons();
+    $(document.body).on('updated_cart_totals', initQtyButtons);
+    $(document.body).on('updated_wc_div', initQtyButtons);
+
+    // 2. Логіка МІНУС
+    $(document.body).on('click', '.minus', function(e) {
+        e.preventDefault();
+        var $input = $(this).siblings('input.qty');
+        var val = parseFloat($input.val()) || 0;
+        var step = parseFloat($input.attr('step')) || 1;
+        var min = parseFloat($input.attr('min')) || 0;
+        if (min === 0) min = 1; // Зазвичай мінімум 1
+        if (val > min) {
+            $input.val(val - step).trigger('change');
+            updateCart();
+        }
+    });
+
+    // 3. Логіка ПЛЮС
+    $(document.body).on('click', '.plus', function(e) {
+        e.preventDefault();
+        var $input = $(this).siblings('input.qty');
+        var val = parseFloat($input.val()) || 0;
+        var step = parseFloat($input.attr('step')) || 1;
+        var max = parseFloat($input.attr('max'));
+        if (isNaN(max) || val < max) {
+            $input.val(val + step).trigger('change');
+            updateCart();
+        }
+    });
+
+    // 4. Фікс видалення (візуально ховаємо рядок одразу)
+    $(document.body).on('click', '.remove', function(e) {
+        // Ми не скасовуємо дефолтну поведінку, бо це посилання!
+        // Але ми візуально ховаємо рядок, щоб користувач бачив реакцію
+        $(this).closest('tr').css('opacity', '0.2').fadeTo(500, 0.1); 
         
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function(e) {
-                const country = countrySelect.value || 'UA';
-                const prefix = prefixes[country] || '';
-                let val = this.value.replace(/[^0-9+]/g, '');
-                if (!val.startsWith(prefix)) {
-                    let userDigits = val.replace(/\D/g, '');
-                    let cleanPrefixDigits = prefix.replace(/\D/g, '');
-                    if (userDigits.startsWith(cleanPrefixDigits)) userDigits = userDigits.substring(cleanPrefixDigits.length);
-                    val = prefix + userDigits;
-                }
-                if (val.length > 15) val = val.substring(0, 15);
-                this.value = val;
-            });
-            phoneInput.addEventListener('focus', function() {
-                if (this.value === '' || this.value === '+') {
-                    const country = countrySelect.value || 'UA';
-                    this.value = prefixes[country] || '+380';
-                }
-            });
-        }
-    }
-
-    // Ajax оновлення
-    function refreshCartLanguage() {
-        if (cart.length === 0 || typeof vlavasta_globals === 'undefined') return;
-        fetch(vlavasta_globals.ajax_url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ action: 'vlavasta_refresh_cart', 'cart_ids[]': cart.map(i => i.id) })
-        }).then(r => r.json()).then(resp => {
-            if (resp.success && resp.data.cart) {
-                cart = cart.map(old => {
-                    const fresh = resp.data.cart.find(i => i.original_id == old.id);
-                    if (fresh) return { ...old, title: fresh.title, priceVal: parseFloat(fresh.priceVal), currency: fresh.currency, link: fresh.link, img: fresh.img || old.img };
-                    return old;
-                });
-                localStorage.setItem('vlavasta_cart', JSON.stringify(cart));
-                updateCartUI();
+        setTimeout(function() {
+             // Якщо кошик став пустим, перезавантажуємо
+             if ( $('.woocommerce-cart-form .shop_table').length === 0 ) {
+                window.location.reload(); 
             }
-        });
-    }
-
-    function refreshFavLanguage() {
-        if (favorites.length === 0 || typeof vlavasta_globals === 'undefined') return;
-        fetch(vlavasta_globals.ajax_url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ action: 'vlavasta_refresh_cart', 'fav_ids[]': favorites.map(i => i.id) })
-        }).then(r => r.json()).then(resp => {
-            if (resp.success && resp.data.fav) {
-                favorites = favorites.map(old => {
-                    const fresh = resp.data.fav.find(i => i.original_id == old.id);
-                    if (fresh) return { ...old, title: fresh.title, price: fresh.price_fmt, link: fresh.link, img: fresh.img || old.img };
-                    return old;
-                });
-                localStorage.setItem('vlavasta_favorites', JSON.stringify(favorites));
-                updateFavUI();
-            }
-        });
-    }
-
-    const prodTrack = document.querySelector('.product-slider-track');
-    const prodNextBtn = document.querySelector('.prod-next');
-    const prodPrevBtn = document.querySelector('.prod-prev');
-
-    if (prodTrack && prodNextBtn && prodPrevBtn) {
-        const prodSlides = prodTrack.querySelectorAll('.product-slide');
-        const totalProdSlides = prodSlides.length;
-        let prodIndex = 0;
-        function updateProdSlider() { prodTrack.style.transform = `translateX(-${prodIndex * 100}%)`; }
-        prodNextBtn.addEventListener('click', () => { prodIndex = (prodIndex + 1) % totalProdSlides; updateProdSlider(); });
-        prodPrevBtn.addEventListener('click', () => { prodIndex = (prodIndex - 1 + totalProdSlides) % totalProdSlides; updateProdSlider(); });
-    }
-
-    refreshCartLanguage();
-    refreshFavLanguage();
-    updateFavUI();
-    updateCartUI();
+        }, 1500);
+    });
 });

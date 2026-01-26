@@ -4,27 +4,22 @@
             
             <div class="footer-col contact-col">
                 <h4><?php if(function_exists('pll_e')) { pll_e('Контакти'); } else { echo 'Контакти'; } ?></h4>
-                <p>vlavasta@gmail.com</p>
-                <p>+48 12 345 6789</p>
+                <p>vlavasta.nk@gmail.com</p>
+                <p>+48 79 296 6425</p>
 
                 <div style="margin-top: 20px; font-size: 13px;">
                     <?php 
-                    // --- ЛОГІКА ПОСИЛАНЬ (БЕЗ functions.php) ---
                     $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'en';
-                    
-                    // Замовчування (Англійська або інша)
                     $offer_slug = 'public-offer';
                     $privacy_slug = 'privacy-policy';
 
-                    // Українська (код 'uk')
                     if ($current_lang == 'uk') {
-                        $offer_slug = 'public-offer-ua'; // Ваше посилання з адмінки
-                        $privacy_slug = 'privacy-policy'; // Перевірте, чи створили ви privacy-policy-ua
+                        $offer_slug = 'public-offer-ua';
+                        $privacy_slug = 'privacy-policy';
                     } 
-                    // Польська (код 'pl')
                     elseif ($current_lang == 'pl') {
-                        $offer_slug = 'public-offer-pl'; // Ваше посилання з адмінки
-                        $privacy_slug = 'privacy-policy'; // Тут теж треба буде змінити, якщо створите окрему сторінку
+                        $offer_slug = 'public-offer-pl';
+                        $privacy_slug = 'privacy-policy';
                     }
                     ?>
 
@@ -62,6 +57,52 @@
     </div>
 </footer>
 
+<div id="fav-modal-overlay" class="custom-modal-overlay" style="display:none;">
+    <div class="custom-modal-content">
+        <div class="mod-header">
+            <h4 class="mod-title">
+                <i class="fa-solid fa-heart" style="color:#E8A6A6; margin-right:10px;"></i> 
+                <?php if(function_exists('pll_e')) { pll_e('Вподобані товари'); } else { echo 'Вподобані товари'; } ?>
+            </h4>
+            <button class="close-modal-btn" id="close-fav-btn">&times;</button>
+        </div>
+        
+        <div class="mod-body">
+            <div id="fav-list-container">
+                </div>
+        </div>
+
+        <div style="padding: 20px 30px; border-top: 1px solid #eee; text-align: center;">
+            <button class="btn-buy close-modal-action" style="width: 100%; max-width: 250px; margin: 0 auto; background: #6BCFB8; color: #fff;">
+                <?php if(function_exists('pll_e')) { pll_e('Продовжити покупки'); } else { echo 'Продовжити покупки'; } ?>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Знаходимо кнопку та меню
+    const userBtn = document.getElementById('userMenuBtn');
+    const userMenu = document.getElementById('userMenuDropdown');
+
+    if (userBtn && userMenu) {
+        // 1. Клік по іконці
+        userBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Зупиняємо спливання, щоб не спрацював клік по body
+            userMenu.classList.toggle('active'); // Перемикаємо клас active
+        });
+
+        // 2. Клік будь-де за межами меню (щоб закрити)
+        document.addEventListener('click', function(e) {
+            if (!userMenu.contains(e.target) && !userBtn.contains(e.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+    }
+});
+</script>
 <?php wp_footer(); ?>
 </body>
 </html>
