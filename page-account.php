@@ -5,7 +5,16 @@ get_header();
 $current_user = wp_get_current_user();
 ?>
 
-<div class="container" style="padding: 80px 20px;">
+<div class="container" style="padding: 80px 50px;">
+
+    <?php 
+    // ДОДАНО: Блок для виводу помилок та повідомлень WooCommerce
+    if ( function_exists( 'wc_print_notices' ) ) {
+        echo '<div class="vlavasta-notices-wrapper" style="max-width: 900px; margin: 0 auto 30px;">';
+        wc_print_notices();
+        echo '</div>';
+    }
+    ?>
 
     <?php if (is_user_logged_in()): ?>
         <div class="account-dashboard-wrapper">
@@ -144,6 +153,8 @@ $current_user = wp_get_current_user();
                     <h3><?php echo vlavasta_t('Вхід'); ?></h3>
                     <form method="POST">
                         <?php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce'); ?>
+                        <input type="hidden" name="redirect" value="<?php echo esc_url(get_permalink()); ?>" />
+                        
                         <div class="input-wrap">
                             <i class="fa-regular fa-envelope"></i>
                             <input type="text" name="username" placeholder="<?php echo vlavasta_t('Email або логін'); ?>" required>

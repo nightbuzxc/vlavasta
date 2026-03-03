@@ -5,7 +5,6 @@
    ========================================= */
 :root {
     --wc-primary: #2c2c2c !important;
-    /* Перебиваємо зелений колір WooCommerce */
     --wc-secondary: #2c2c2c !important;
     --wp--preset--color--primary: #2c2c2c !important;
 }
@@ -558,23 +557,37 @@ main .hero {
 }
 
 .btn-buy {
-    background-color: #6BCFB8;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #2c2c2c;
-    cursor: pointer;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #5AB8A3 !important;
+        /* Основний колір (темніший зелений) */
+        color: #fff !important;
+        /* Білий текст */
+        border: none;
+        border-radius: 12px;
+        /* Заокруглення як в еталоні */
+        font-weight: 700;
+        text-transform: uppercase;
+        /* Великі літери */
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        padding: 12px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(99, 67, 67, 0.15);
+        /* Тінь */
 }
 
 .btn-buy:hover {
-    background-color: #5ab8a3;
+    background-color: #6BCFB8 !important;
+        /* Світліший при наведенні */
+        transform: translateY(-3px);
+        /* Ефект підстрибування */
+        box-shadow: 0 10px 25px rgba(107, 207, 184, 0.3);
+        /* Більша тінь */
+
 }
 
 .btn-fav {
@@ -597,16 +610,15 @@ main .hero {
 /* === STYLING RELATED PRODUCTS === */
 .woocommerce ul.products li.product,
 .related.products ul.products li.product {
-    background: #fff;
+    background: #FFFBF2;
     border-radius: 16px;
     padding: 15px;
-    box-shadow: 0 10px 30px rgba(99, 67, 67, 0.08);
     border: 1px solid rgba(0, 0, 0, 0.02);
     text-align: left !important;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
-    width: 100%;
+    width: 25%;
     margin-bottom: 30px;
 }
 
@@ -647,23 +659,48 @@ main .hero {
     display: block;
     text-align: left !important;
 }
-
+/* Кнопка "Додати в кошик" у списках товарів (Каталог, Супутні) */
 .woocommerce ul.products li.product .button {
-    background-color: #6BCFB8 !important;
-    color: #2c2c2c !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    padding: 10px !important;
+    background-color: #5AB8A3 !important;
+    /* Основний зелений колір */
+    color: #fff !important;
+    /* Білий текст */
+    border-radius: 12px !important;
+    /* Заокруглення як в еталоні */
+    font-weight: 700 !important;
+    padding: 12px 15px !important;
+    /* Трохи більше повітря */
     margin-top: auto;
     text-align: center;
     width: 100%;
-    display: block;
+    display: flex;
+    /* Рівняємо текст по центру */
+    align-items: center;
+    justify-content: center;
     border: none !important;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 5px 15px rgba(99, 67, 67, 0.15);
+    /* Тінь */
+    transition: all 0.3s ease;
+    min-height: 45px;
+    /* Фіксована висота для краси */
 }
 
+/* Ефект при наведенні */
 .woocommerce ul.products li.product .button:hover {
-    background-color: #5ab8a3 !important;
+    background-color: #6BCFB8 !important;
+    /* Світліший зелений */
+    transform: translateY(-3px);
+    /* Підстрибування */
+    box-shadow: 0 10px 25px rgba(107, 207, 184, 0.3);
+    color: #fff !important;
+}
+
+/* Іконка завантаження (коли натиснули) */
+.woocommerce ul.products li.product .button.loading {
+    opacity: 0.7;
+    cursor: wait;
 }
 
 /* --- AUTH PAGE --- */
@@ -1165,7 +1202,7 @@ main .hero {
 .product_title {
     font-size: 38px !important;
     font-weight: 800 !important;
-    color: #634343 !important;
+    color: #333333 !important;
     margin-bottom: 15px !important;
     line-height: 1.1;
     letter-spacing: -1px;
@@ -1193,7 +1230,7 @@ main .hero {
     flex-grow: 1;
     max-width: 300px;
     height: 55px !important;
-    background-color: #634343 !important;
+    background-color: #5AB8A3 !important;
     color: #fff !important;
     border-radius: 12px !important;
     font-size: 16px !important;
@@ -1352,6 +1389,16 @@ button[name='update_cart'] {
 /* 1. TABLE STRUCTURE - CLEAN & TRANSPARENT */
 .woocommerce-cart .shop_table {
     background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        border-collapse: collapse !important;
+        width: 100%;
+}
+
+/* 1. TABLE STRUCTURE - CLEAN & TRANSPARENT */
+.woocommerce-cart .shop_table {
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
@@ -1364,13 +1411,33 @@ button[name='update_cart'] {
 }
 
 .woocommerce-cart .shop_table th {
+    background: transparent !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #999;
+    padding: 15px 0 !important;
+    text-align: left !important;
     border: none !important;
     border-bottom: 1px solid #e0e0e0 !important;
 }
 
 .woocommerce-cart .shop_table td {
+    background: transparent !important;
+    border-top: none !important;
+    padding: 20px 0 !important;
+    vertical-align: middle;
+    text-align: left !important;
     border: none !important;
     border-bottom: 1px solid #eee !important;
+    /* Лінія під товаром */
+}
+
+/* ОСЬ ЦЕ НОВЕ ПРАВИЛО: */
+.woocommerce-cart .shop_table tr:last-child td {
+    border-bottom: none !important;
+    /* Прибирає лінію під останнім елементом */
 }
 
 .woocommerce-cart .shop_table th {
@@ -1581,57 +1648,66 @@ button[name='update_cart'] {
 }
 
 .wc-proceed-to-checkout a.checkout-button {
-    background-color: #634343 !important;
+    background-color: #5AB8A3 !important;
+    /* Було #634343, стало зеленим */
     color: #fff !important;
     font-weight: 700;
-    padding: 15px 0 !important;
-    border-radius: 8px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 18px 30px !important;
+    border-radius: 12px !important;
     width: 100%;
     display: block;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(99, 67, 67, 0.2);
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(99, 67, 67, 0.15);
+    transition: all 0.3s ease;
 }
 
 .wc-proceed-to-checkout a.checkout-button:hover {
     background-color: #6BCFB8 !important;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(107, 207, 184, 0.4);
 }
-
 /* =========================================
-   ВИПРАВЛЕННЯ ДЛЯ WOOCOMMERCE BLOCKS (ЧЕКАУТ)
+   CHECKOUT PAGE: RESET & BLACK PRICES (FIX)
    ========================================= */
 
-/* 1. ПРИХОВУЄМО НЕПОТРІБНІ РЯДКИ */
-/* Приховуємо рядок "Проміжний підсумок" (Subtotal) */
-.wc-block-components-totals-item.wc-block-components-totals-item--subtotal {
-    display: none !important;
+/* Забираємо дизайн картки з підсумку (щоб було "як було") */
+.checkout-summary-col,
+#order_review,
+.woocommerce-checkout-review-order-table {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
 }
 
-/* Приховуємо рядок "Доставка" (InPost/Shipping) */
-.wc-block-components-totals-item.wc-block-components-totals-item--shipping {
-    display: none !important;
+/* Прибираємо границі у таблиці огляду замовлення */
+.woocommerce-checkout-review-order-table th,
+.woocommerce-checkout-review-order-table td {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eee !important;
+    /* Тільки знизу легка лінія */
 }
 
-/* 2. ПРИБИРАЄМО ДУБЛІ ТОВАРІВ */
-/* Приховуємо метадані (назву варіації), щоб вона не дублювалася */
-.wc-block-components-product-metadata {
-    display: none !important;
-}
-
-/* Приховуємо ціну за одиницю, залишаємо тільки "Загальну ціну" */
-.wc-block-components-product-price {
-    display: none !important;
-}
-
-/* 3. ЖОРСТКИЙ ЧОРНИЙ КОЛІР ДЛЯ ЦІН */
+/* ПРИМУСОВО ЧОРНИЙ КОЛІР ДЛЯ ВСІХ ЦІН НА ЧЕКАУТІ */
+.woocommerce-checkout .amount,
+.woocommerce-checkout .product-total,
+.woocommerce-checkout .order-total .amount,
 .wc-block-components-order-summary-item__total-price,
-.wc-block-components-totals-item__value,
-.wc-block-components-formatted-money-amount,
-.wc-block-components-order-summary-item__total-price span,
-.wc-block-components-totals-item__value span {
+.wc-block-components-totals-item__value {
     color: #2c2c2c !important;
+    /* ЧОРНИЙ! */
     font-weight: 700 !important;
-    text-decoration: none !important;
+}
+
+/* Заголовки (Товар, Підсумок) - сірі */
+.woocommerce-checkout-review-order-table th {
+    color: #777 !important;
+    font-weight: 500 !important;
 }
 
 /* =========================================
@@ -1967,6 +2043,7 @@ button[name='update_cart'] {
         flex-direction: column;
     }
 
+    /* Мобільна адаптація футера */
     .footer-content {
         flex-direction: column;
         text-align: center;
@@ -1986,16 +2063,69 @@ button[name='update_cart'] {
         transform: translateX(-50%);
         right: auto;
     }
+
+        /* === STYLING RELATED PRODUCTS === */
+        .woocommerce ul.products li.product,
+        .related.products ul.products li.product {
+            background: #FFFBF2;
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            text-align: left !important;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            width: 50%;
+            margin-bottom: 30px;
+        }
+    
+        .woocommerce ul.products li.product:hover {
+            transform: translateY(-5px);
+        }
+    
+        .woocommerce ul.products li.product img {
+            border-radius: 12px;
+            margin-bottom: 15px !important;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: block;
+        }
+    
+        .woocommerce ul.products li.product .woocommerce-loop-product__title {
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            padding: 0 !important;
+            margin-bottom: 5px !important;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 40px;
+        }
+    
+        .woocommerce ul.products li.product .price {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: #2c2c2c !important;
+            margin-bottom: 15px !important;
+            display: block;
+            text-align: left !important;
+        }
 }
 
-/* --- FOOTER & MISC --- */
+/* --- FOOTER & MISC (ЦЕ МАЄ БУТИ В САМОМУ КІНЦІ ФАЙЛУ) --- */
 footer.site-footer {
     display: block !important;
     width: 100%;
     margin-top: 50px;
     background-color: #634343;
     color: #fff;
-    padding-top: 60px;
+    padding-top: 30px;
     border-top: 4px solid #E8A6A6;
     clear: both;
 }
@@ -2075,6 +2205,81 @@ footer.site-footer {
     transform: translateX(5px);
 }
 
+.footer-col2 {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Права колонка - соцмережі */
+.social-col2 {
+    text-align: right;
+}
+
+/* Ліва колонка - контакти */
+.contact-col {
+    text-align: left;
+}
+
+.footer-col2 h4 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    /* Білий заголовок */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-col2 h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #6BCFB8;
+}
+
+/* Для правої колонки лінію теж праворуч */
+.social-col h4::after {
+    left: 100% !important;
+        /* Чим більше %, тим правіше */
+        /* Можна спробувати 65% або 70%, якщо мало */
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: 40px !important;
+        height: 2px !important;
+        bottom: 0 !important;
+        background-color: #6BCFB8 !important;
+        position: absolute;
+}
+
+.footer-col2 p {
+    font-size: 15px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #fff;
+    /* Білий текст */
+}
+
+.footer-col2 a {
+    color: #fff !important;
+    /* Білі посилання */
+    text-decoration: none !important;
+    /* Без підкреслення */
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.footer-col2 a:hover {
+    color: #6BCFB8 !important;
+    transform: translateX(5px);
+}
+
 .social-link {
     display: flex;
     align-items: center;
@@ -2104,7 +2309,7 @@ footer.site-footer {
 .copyright-bar {
     background-color: #4e3434;
     text-align: center;
-    padding: 20px;
+    padding: 5px;
     font-size: 13px;
     color: #aaa;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -2112,4 +2317,541 @@ footer.site-footer {
 
 .woocommerce-order-received .woocommerce-customer-details .woocommerce-column--billing-address {
     display: none !important;
+}
+
+/* =========================================
+   ВИПРАВЛЕННЯ ДЛЯ WOOCOMMERCE BLOCKS (ЧЕКАУТ - ФІНАЛ)
+   ========================================= */
+
+/* 1. ПРИХОВУЄМО НЕПОТРІБНІ РЯДКИ (Subtotal, Shipping) */
+.wc-block-components-totals-item.wc-block-components-totals-item--subtotal,
+.wc-block-components-totals-item.wc-block-components-totals-item--shipping,
+.wc-block-components-totals-shipping {
+    display: none !important;
+}
+
+/* 2. ПРИХОВУЄМО ДУБЛІ ЦІНИ ТА МЕТАДАНІ */
+.wc-block-components-product-price,
+.wc-block-components-product-metadata,
+.wc-block-components-product-details {
+    display: none !important;
+}
+
+/* 3. НАЛАШТУВАННЯ ТОВАРНОГО РЯДКА (Назва зліва, Ціна справа) */
+.wc-block-components-order-summary-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 5px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.wc-block-components-order-summary-item__image {
+    margin-right: 8px !important;
+    /* Маленький відступ від фото до назви */
+    padding-right: 0 !important;
+    flex: 0 0 60px !important;
+    width: 60px !important;
+}
+
+/* Контейнер для тексту (назва + ціна) */
+.wc-block-components-order-summary-item__content {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Обнуляємо відступи у контейнера опису, щоб назва "прилипла" вліво */
+.wc-block-components-order-summary-item__description {
+    margin-right: auto !important;
+    /* Штовхає ціну вправо */
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    text-align: left !important;
+    flex-grow: 1 !important;
+}
+
+/* Сама назва */
+.wc-block-components-product-name {
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    color: #333 !important;
+    text-align: left !important;
+    margin: 0 !important;
+}
+
+/* Ціна */
+.wc-block-components-order-summary-item__total-price {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #2c2c2c !important;
+    white-space: nowrap !important;
+}
+/* =========================================
+   ВИПРАВЛЕННЯ ІКОНОК У МЕНЮ ПРОФІЛЮ (FINAL)
+   ========================================= */
+
+/* Налаштування контейнера кнопки (рівняємо текст і іконку) */
+.user-dropdown-menu .user-drop-link {
+    display: flex !important;
+    align-items: center !important;
+    /* Центрує по вертикалі */
+    gap: 12px !important;
+    /* Відступ між іконкою та текстом */
+    padding: 12px 25px !important;
+    /* Комфортні відступи */
+}
+
+/* Налаштування самої іконки */
+.user-dropdown-menu .user-drop-link i {
+    color: #333333 !important;
+    /* Темний колір */
+    font-size: 18px !important;
+    /* Зменшений розмір (було 24px) */
+    width: 20px !important;
+    /* Фіксована ширина, щоб текст був рівно */
+    height: auto !important;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    /* Прибираємо зайві відступи */
+    line-height: 1 !important;
+}
+
+/* При наведенні мишки на пункт меню - іконка зелена */
+.user-dropdown-menu .user-drop-link:hover i {
+    color: #6BCFB8 !important;
+}
+
+/* Кнопка виходу (червона при наведенні) */
+.user-dropdown-menu .user-drop-link.logout:hover i {
+    color: #e74c3c !important;
+}
+
+/* РОБИМО СТРІЛКИ СЛАЙДЕРА ВИДИМИМИ НА МОБІЛЬНИХ */
+@media (max-width: 768px) {
+    .p-arrow {
+        opacity: 1 !important;
+        /* Завжди показувати */
+        background: rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* =========================================
+   СТОРІНКА "ДЯКУЄМО ЗА ЗАМОВЛЕННЯ" (MODERN THANK YOU PAGE)
+   ========================================= */
+
+/* 1. Загальний контейнер - робимо як "Картку" */
+.woocommerce-order {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(99, 67, 67, 0.08);
+    /* М'яка тінь */
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    text-align: center;
+    /* Центруємо вміст */
+}
+
+/* 2. Повідомлення "Дякуємо" */
+.woocommerce-order>p.woocommerce-notice {
+    font-size: 24px;
+    font-weight: 800;
+    color: #6BCFB8;
+    /* Ваш зелений */
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Додаємо велику галочку зверху */
+.woocommerce-order>p.woocommerce-notice::before {
+    content: "\f00c";
+    /* FontAwesome Check Icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 50px;
+    width: 90px;
+    height: 90px;
+    background: #e8f8f5;
+    /* Світло-зелене коло */
+    color: #6BCFB8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* 3. Список даних замовлення (Номер, дата, email) */
+ul.order_details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 20px 0;
+    margin: 0 0 40px 0;
+    border-top: 1px dashed #eee;
+    border-bottom: 1px dashed #eee;
+}
+
+ul.order_details li {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #888;
+    border-right: none !important;
+    padding: 0 15px;
+    margin: 0;
+    float: none !important;
+}
+
+ul.order_details li strong {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+    margin-top: 5px;
+    text-transform: none;
+}
+
+/* 4. Заголовки секцій (Деталі замовлення, Адреса) */
+.woocommerce-order h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #634343;
+    /* Ваш коричневий */
+    margin-bottom: 20px;
+    text-align: left;
+    /* Заголовки зліва */
+    border-left: 4px solid #6BCFB8;
+    padding-left: 15px;
+}
+
+/* 5. Таблиця замовлення */
+.woocommerce-table--order-details {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.woocommerce-table--order-details th,
+.woocommerce-table--order-details td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.woocommerce-table--order-details th {
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.woocommerce-table--order-details td {
+    color: #333;
+    font-weight: 600;
+}
+
+.woocommerce-table--order-details tr:last-child td {
+    border-bottom: none;
+}
+
+/* Посилання на товар */
+.woocommerce-table--order-details a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* 6. Підсумки (Total, Tax) */
+.woocommerce-table--order-details tfoot th {
+    text-align: right;
+    width: 60%;
+}
+
+.woocommerce-table--order-details tfoot td {
+    text-align: right;
+}
+
+.woocommerce-table--order-details tfoot tr:last-child th,
+.woocommerce-table--order-details tfoot tr:last-child td {
+    color: #6BCFB8;
+    font-size: 18px;
+    font-weight: 800;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+
+/* 7. Адреса */
+.woocommerce-customer-details address {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    font-style: normal;
+    background: #fdfdfd;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Мобільна адаптація */
+@media (max-width: 768px) {
+    .woocommerce-order {
+        padding: 20px;
+        margin: 20px 10px;
+    }
+
+    ul.order_details {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    ul.order_details li {
+        border-bottom: 1px solid #f9f9f9;
+        padding-bottom: 10px;
+    }
+}
+
+/* =========================================
+   COOKIE BANNER (Vlavasta Design)
+   ========================================= */
+
+/* 1. Контейнер банера */
+.cky-consent-container {
+    background-color: #ffffff !important;
+    /* Білий фон */
+    border: 1px solid #eee !important;
+    border-radius: 16px !important;
+    /* Заокруглення */
+    box-shadow: 0 10px 40px rgba(99, 67, 67, 0.1) !important;
+    /* Тінь */
+    bottom: 20px !important;
+    left: 20px !important;
+    max-width: 400px !important;
+    /* Компактний віджет зліва */
+}
+
+/* 2. Заголовок */
+p.cky-title {
+    color: #634343 !important;
+    /* Коричневий */
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+}
+
+/* 3. Текст */
+.cky-notice-descripton {
+    color: #555555 !important;
+    font-family: "Montserrat", sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+}
+
+/* 4. Кнопка "Прийняти все" (Зелена) */
+button.cky-btn-accept {
+    background-color: #6BCFB8 !important;
+    border-color: #6BCFB8 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+button.cky-btn-accept:hover {
+    background-color: #5ab8a3 !important;
+    transform: translateY(-2px);
+}
+
+/* 5. Кнопка "Налаштувати" / "Відхилити" (Прозора) */
+button.cky-btn-customize,
+button.cky-btn-reject {
+    color: #888888 !important;
+    border: 1px solid #eee !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+}
+
+button.cky-btn-customize:hover,
+button.cky-btn-reject:hover {
+    border-color: #634343 !important;
+    color: #634343 !important;
+}
+
+/* 6. Іконка (кукі) зліва внизу (Revisit consent) */
+.cky-revisit-bottom-left {
+    background-color: #6BCFB8 !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================================
+   Vlavasta: Clean Cart Button (No Animation)
+   ========================================= */
+
+/* 1. Прибрати напис "Zobacz koszyk" (View cart) */
+a.added_to_cart {
+    display: none !important;
+}
+
+/* 2. Прибрати галочку після додавання */
+/* Для кнопок у каталозі */
+.woocommerce ul.products li.product .button.added::after,
+.woocommerce ul.products li.product .button.added i {
+    display: none !important;
+    content: none !important;
+}
+
+/* Щоб іконка кошика не зникала (якщо вона була) */
+.woocommerce ul.products li.product .button.added .astra-icons {
+    display: inline-block !important;
+}
+
+/* 3. Прибрати анімацію завантаження (спінер) */
+.woocommerce ul.products li.product .button.loading {
+    opacity: 1 !important;
+    /* Кнопка не стає напівпрозорою */
+    padding-right: 10px !important;
+    /* Не зсувається текст */
+}
+
+.woocommerce ul.products li.product .button.loading::after {
+    display: none !important;
+    /* Ховаємо сам спінер */
+}
+
+/* =========================================
+   MOBILE FIX: THANK YOU PAGE (Compact & Clean)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* 1. Зменшуємо відступи контейнера */
+    .woocommerce-order {
+        padding: 25px 20px !important;
+        margin: 20px 15px !important;
+        border-radius: 16px !important;
+    }
+
+    /* 2. Зменшуємо величезну галочку */
+    .woocommerce-order>p.woocommerce-notice::before {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 30px !important;
+        /* Менша іконка */
+        margin-bottom: 15px !important;
+    }
+
+    .woocommerce-order>p.woocommerce-notice {
+        font-size: 20px !important;
+        /* Менший заголовок */
+        margin-bottom: 20px !important;
+    }
+
+    /* 3. Переробляємо список деталей (Номер, Дата...) в табличний вигляд */
+    ul.order_details {
+        display: flex !important;
+        flex-direction: column !important;
+        background: #f9f9f9 !important;
+        /* Світло-сірий фон */
+        border-radius: 12px !important;
+        padding: 0 15px !important;
+        margin: 0 0 30px 0 !important;
+        border: 1px solid #eee !important;
+        gap: 0 !important;
+    }
+
+    ul.order_details li {
+        display: flex !important;
+        justify-content: space-between !important;
+        /* Назва зліва, Значення справа */
+        align-items: center !important;
+        width: 100% !important;
+        padding: 15px 0 !important;
+        border-bottom: 1px solid #eee !important;
+        border-right: none !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    ul.order_details li:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Стиль для назви (зліва) - дрібний сірий текст */
+    ul.order_details li {
+        font-size: 13px !important;
+        color: #777 !important;
+        text-transform: none !important;
+        /* Прибираємо капс, щоб не кричало */
+    }
+
+    /* Стиль для значення (справа) - жирний темний текст */
+    ul.order_details li strong {
+        display: block !important;
+        margin-top: 0 !important;
+        font-size: 14px !important;
+        color: #333 !important;
+        text-align: right !important;
+        max-width: 60%;
+        /* Щоб довгі мейли не ламали верстку */
+        word-wrap: break-word;
+    }
+
+    /* 4. Виправляємо таблицю товарів знизу (якщо вона є) */
+    .woocommerce-table--order-details {
+        border: none !important;
+    }
+
+    .woocommerce-table--order-details thead {
+        display: none !important;
+        /* Ховаємо шапку таблиці */
+    }
+
+    .woocommerce-table--order-details tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+    }
+
+    .woocommerce-table--order-details td {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0 !important;
+        border: none !important;
+        text-align: right !important;
+    }
+
+    /* Додаємо підписи до значень у таблиці */
+    .woocommerce-table--order-details td::before {
+        content: attr(data-title);
+        float: left;
+        font-weight: 600;
+        color: #777;
+    }
 }

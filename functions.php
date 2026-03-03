@@ -25,31 +25,38 @@ function vlavasta_reorder_checkout_fields($fields) {
     unset($fields['billing']['billing_company']);
     unset($fields['billing']['billing_address_2']);
     unset($fields['billing']['billing_state']);
+    
     // Країна
     $fields['billing']['billing_country']['priority'] = 10;
     $fields['billing']['billing_country']['class'] = array('form-row-wide');
+    
     // Ім'я та Прізвище
     $fields['billing']['billing_first_name']['priority'] = 20;
     $fields['billing']['billing_first_name']['class'] = array('form-row-first');
     $fields['billing']['billing_last_name']['priority'] = 30;
     $fields['billing']['billing_last_name']['class'] = array('form-row-last');
+    
     // Адреса
     $fields['billing']['billing_address_1']['priority'] = 40;
     $fields['billing']['billing_address_1']['class'] = array('form-row-wide');
     $fields['billing']['billing_address_1']['label'] = 'Адреса / Adres';
     $fields['billing']['billing_address_1']['placeholder'] = 'Вулиця та номер будинку';
+    
     // Індекс та Місто
     $fields['billing']['billing_postcode']['priority'] = 50;
     $fields['billing']['billing_postcode']['class'] = array('form-row-first');
     $fields['billing']['billing_city']['priority'] = 60;
     $fields['billing']['billing_city']['class'] = array('form-row-last');
+    
     // ТЕЛЕФОН І ЕМЕЙЛ
     $fields['billing']['billing_phone']['priority'] = 100;
     $fields['billing']['billing_phone']['class'] = array('form-row-first');
     $fields['billing']['billing_phone']['required'] = true;
+    
     $fields['billing']['billing_email']['priority'] = 110;
     $fields['billing']['billing_email']['class'] = array('form-row-last');
     $fields['billing']['billing_email']['required'] = true;
+    
     // ВИБІР СЛУЖБИ ДОСТАВКИ
     $fields['billing']['shipping_carrier_option'] = array(
         'type'      => 'select',
@@ -61,6 +68,7 @@ function vlavasta_reorder_checkout_fields($fields) {
             '' => 'Спочатку оберіть країну / Wybierz kraj',
         ),
     );
+    
     // Номер відділення
     $fields['billing']['shipping_branch_number'] = array(
         'type'      => 'text',
@@ -74,7 +82,7 @@ function vlavasta_reorder_checkout_fields($fields) {
     return $fields;
 }
 
-// Очистка CSS
+// Очистка CSS (і приховування "Безкоштовно")
 add_action('wp_head', 'vlavasta_clean_css');
 function vlavasta_clean_css() {
     ?>
@@ -90,6 +98,17 @@ function vlavasta_clean_css() {
             border-radius: 5px;
         }
         
+        /* Приховуємо "Безкоштовно" у новому блоці чекауту */
+        .wc-block-checkout__shipping-option--free {
+            display: none !important;
+        }
+        
+        /* На всяк випадок, якщо структура зміниться */
+        .wc-block-components-shipping-rates-control__package .wc-block-components-radio-control__label-group > span:last-child:contains("Bezplatnie"),
+        .wc-block-components-shipping-rates-control__package .wc-block-components-radio-control__label-group > span:last-child:contains("Free") {
+             display: none !important;
+        }
+
         /* CSS-дубль для підстраховки */
         #order_review_heading, 
         .woocommerce-checkout-review-order-table-toggle {
@@ -139,19 +158,14 @@ function vlavasta_js_logic() {
         // --- 2. ВИДАЛЕННЯ ДУБЛІВ НА МОБІЛЬНОМУ (ЯДЕРНИЙ МЕТОД) ---
         function removeMobileDuplicates() {
             if ($(window).width() < 769) {
-                // Видаляємо заголовок "Підсумок замовлення"
                 $('#order_review_heading').remove();
-                // Видаляємо кнопку-розгортайку "Показати деталі"
                 $('.woocommerce-checkout-review-order-table-toggle').remove();
-                // Видаляємо сам блок, якщо він дублюється зверху
                 $('.woocommerce-checkout > .woocommerce-checkout-review-order').remove(); 
             }
         }
         
-        // Запускаємо відразу і при зміні розміру екрану
         removeMobileDuplicates();
         $(window).resize(removeMobileDuplicates);
-        // Запускаємо через секунду, якщо елементи підвантажуються динамічно
         setTimeout(removeMobileDuplicates, 500);
         setTimeout(removeMobileDuplicates, 1500);
     });
@@ -175,13 +189,15 @@ function vlavasta_check_phone_process() {
     }
 }
 
-/* Прибираємо напис "Безкоштовно" */
-add_filter( 'woocommerce_cart_shipping_method_full_label', 'vlavasta_hide_free_label', 10, 2 );
-function vlavasta_hide_free_label( $label, $method ) {
-    if ( $method->cost == 0 ) {
-        return $method->label; 
+// Запобіжник: Видаляємо слово "Free" з перекладів
+add_filter( 'gettext', 'vlavasta_kill_free_text', 999, 3 );
+function vlavasta_kill_free_text( $translated_text, $text, $domain ) {
+    if ( $domain === 'woocommerce' ) {
+        if ( $text === 'Free' || $text === 'Free!' || $text === 'Bezplatnie' ) {
+            return '';
+        }
     }
-    return $label;
+    return $translated_text;
 }
 
 if (!function_exists('vlavasta_t')) {
@@ -204,8 +220,8 @@ function vlavasta_force_account_template( $template ) {
     }
     return $template;
 }
-remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 
+remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 add_action( 'woocommerce_before_single_product_summary', 'vlavasta_custom_product_gallery', 20 );
 
 function vlavasta_custom_product_gallery() {
@@ -231,23 +247,19 @@ function vlavasta_custom_product_gallery() {
     echo '<div class="images custom-product-slider-wrapper">';
         
         if ( !empty($all_images) ) {
-            echo '<div class="custom-product-slider" id="mainProductSlider">';
-
+            echo '<div class="custom-product-slider" id="productGallerySlider">';
                 echo '<div class="slider-inner">';
-                
                 foreach ( $all_images as $index => $img_id ) {
                     $img_url = wp_get_attachment_image_url($img_id, 'large');
                     echo '<div class="slide-item">';
                         echo '<img src="' . esc_url($img_url) . '" alt="Product image">';
                     echo '</div>';
                 }
-                
                 echo '</div>';
                 if ( count($all_images) > 1 ) {
-                    echo '<button class="p-arrow p-prev" onclick="changeMainSlide(-1)">&#10094;</button>';
-                    echo '<button class="p-arrow p-next" onclick="changeMainSlide(1)">&#10095;</button>';
+                    echo '<button class="p-arrow p-prev"><i class="fa-solid fa-chevron-left"></i></button>';
+                    echo '<button class="p-arrow p-next"><i class="fa-solid fa-chevron-right"></i></button>';
                 }
-
             echo '</div>';
         } else {
             echo '<img src="' . wc_placeholder_img_src() . '" alt="Placeholder" style="border-radius:20px;">';
@@ -255,21 +267,19 @@ function vlavasta_custom_product_gallery() {
 
     echo '</div>';
 }
-add_filter( 'woocommerce_product_tabs', 'vlavasta_remove_reviews_tab', 98 );
 
+add_filter( 'woocommerce_product_tabs', 'vlavasta_remove_reviews_tab', 98 );
 function vlavasta_remove_reviews_tab( $tabs ) {
     unset( $tabs['reviews'] );
     return $tabs;
 }
 
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
-
 add_action( 'woocommerce_single_product_summary', 'vlavasta_output_desc_under_cart', 35 );
 
 function vlavasta_output_desc_under_cart() {
     ?>
     <div class="custom-product-desc" style="margin-top: 40px; color: #333;">
-        
         <h3 style="font-size: 22px; font-weight: 800; color: #2c2c2c; margin-bottom: 15px; text-transform: none;">
             <?php 
             if(function_exists('pll_e')) { 
@@ -279,11 +289,9 @@ function vlavasta_output_desc_under_cart() {
             } 
             ?>
         </h3>
-
         <div style="font-size: 15px; line-height: 1.6;">
             <?php the_content(); ?>
         </div>
-
     </div>
     <?php
 }
@@ -293,9 +301,6 @@ function vlavasta_remove_breadcrumbs() {
     remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
 }
 
-/* =========================================
-   РЕЄСТРАЦІЯ РЯДКІВ ДЛЯ POLYLANG (КОШИК)
-   ========================================= */
 add_action('init', 'vlavasta_register_cart_strings');
 function vlavasta_register_cart_strings() {
     if (function_exists('pll_register_string')) {
@@ -305,9 +310,7 @@ function vlavasta_register_cart_strings() {
         pll_register_string('vlavasta', 'Return to shop', 'Vlavasta Theme'); 
     }
 }
-/* =========================================
-   ВИПРАВЛЕННЯ ВИДАЛЕННЯ ТОВАРУ В КОШИКУ
-   ========================================= */
+
 add_action( 'wp_footer', 'vlavasta_cart_refresh_fix' );
 function vlavasta_cart_refresh_fix() {
     if ( is_cart() || is_checkout() ) {
@@ -318,5 +321,23 @@ function vlavasta_cart_refresh_fix() {
             });
         </script>
         <?php
+    }
+}
+
+add_action( 'woocommerce_cart_is_empty', 'vlavasta_show_products_empty_cart' );
+function vlavasta_show_products_empty_cart() {
+    echo '<h3 style="margin-top: 30px; margin-bottom: 20px;">Можливо, вам сподобається:</h3>';
+    echo do_shortcode( '[products limit="4" columns="4" orderby="popularity"]' );
+}
+
+add_action( 'template_redirect', 'vlavasta_force_no_cache' );
+function vlavasta_force_no_cache() {
+    if ( is_cart() || is_checkout() || is_account_page() ) {
+        if ( ! headers_sent() ) {
+            header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
+            header( 'Cache-Control: post-check=0, pre-check=0', false );
+            header( 'Pragma: no-cache' );
+        }
+        wc_nocache_headers();
     }
 }

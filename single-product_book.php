@@ -21,13 +21,13 @@
             // 1. Створюємо масив для всіх картинок
             $all_images = [];
 
-            // 2. Беремо ГОЛОВНЕ фото (Featured Image) - воно буде першим
+            // 2. Беремо ГОЛОВНЕ фото
             $main_img = get_the_post_thumbnail_url(get_the_ID(), 'full');
             if ($main_img) {
                 $all_images[] = $main_img;
             }
 
-            // 3. ЦИКЛ: Автоматично перевіряємо поля photo_1 до photo_5
+            // 3. ЦИКЛ: Додаткові фото ACF
             for ($i = 1; $i <= 5; $i++) {
                 $field_name = 'photo_' . $i;
                 $img_url = get_field($field_name);
@@ -38,25 +38,27 @@
             ?>
 
             <?php if (count($all_images) > 1) : ?>
-                <div class="product-slider-container">
-                    <div class="product-slider-track">
+                <div class="custom-product-slider" id="productGallerySlider">
+                    <div class="slider-inner">
                         <?php foreach($all_images as $img_url): ?>
-                            <div class="product-slide">
+                            <div class="slide-item">
                                 <img src="<?php echo esc_url($img_url); ?>" alt="Product Image">
                             </div>
                         <?php endforeach; ?>
                     </div>
                     
-                    <button class="prod-arrow prod-prev"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="prod-arrow prod-next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button class="p-arrow p-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="p-arrow p-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
 
             <?php elseif (count($all_images) === 1) : ?>
-                <div class="main-image">
-                    <img src="<?php echo esc_url($all_images[0]); ?>" alt="Product Image">
+                <div class="main-image" style="border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(99, 67, 67, 0.1);">
+                    <img src="<?php echo esc_url($all_images[0]); ?>" alt="Product Image" style="display:block; width:100%; height:auto;">
                 </div>
             <?php else: ?>
-                <div class="placeholder-image" style="background:#eee; height:450px; width:100%; border-radius: 12px;"></div>
+                <div class="placeholder-image" style="background:#f0f0f0; height:450px; width:100%; border-radius: 20px; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                    <i class="fa-regular fa-image" style="font-size: 40px;"></i>
+                </div>
             <?php endif; ?>
         </div>
 

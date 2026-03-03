@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="footer-col social-col">
+            <div class="footer-col2 social-col">
                 <h4><?php if(function_exists('pll_e')) { pll_e('Соціальні мережі'); } else { echo 'Соціальні мережі'; } ?></h4>
                 <a href="https://www.tiktok.com/@vlavasta.pl" class="social-link">
                     <i class="fa-brands fa-tiktok"></i> vlavasta.pl
@@ -82,19 +82,15 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Знаходимо кнопку та меню
     const userBtn = document.getElementById('userMenuBtn');
     const userMenu = document.getElementById('userMenuDropdown');
 
     if (userBtn && userMenu) {
-        // 1. Клік по іконці
         userBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            e.stopPropagation(); // Зупиняємо спливання, щоб не спрацював клік по body
-            userMenu.classList.toggle('active'); // Перемикаємо клас active
+            e.stopPropagation();
+            userMenu.classList.toggle('active');
         });
-
-        // 2. Клік будь-де за межами меню (щоб закрити)
         document.addEventListener('click', function(e) {
             if (!userMenu.contains(e.target) && !userBtn.contains(e.target)) {
                 userMenu.classList.remove('active');
