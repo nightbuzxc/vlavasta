@@ -1,0 +1,2857 @@
+@charset "UTF-8";
+
+/* =========================================
+   1. ГЛОБАЛЬНІ СТИЛІ
+   ========================================= */
+:root {
+    --wc-primary: #2c2c2c !important;
+    --wc-secondary: #2c2c2c !important;
+    --wp--preset--color--primary: #2c2c2c !important;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #FFFBF2;
+    color: #2c2c2c;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+img {
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* --- HEADER --- */
+header {
+    background-color: #634343;
+    padding: 15px 0;
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+header .logo {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff !important;
+    text-decoration: none;
+    text-transform: lowercase;
+}
+
+header .logo:hover {
+    color: #6BCFB8 !important;
+}
+
+header .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-icons i {
+    font-size: 24px;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.header-icons a:hover i,
+.header-icons .user-icon-trigger:hover i {
+    color: #6BCFB8;
+    transform: translateY(-3px);
+    transition: all 0.3s ease !important;
+}
+
+.header-icons a,
+.icon-link,
+.cart-icon-wrapper,
+.user-menu-container {
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .cart-icon-wrapper {
+    position: relative !important;
+    overflow: visible !important;
+    display: inline-flex !important;
+}
+
+header .cart-count {
+    position: absolute !important;
+    top: -8px !important;
+    right: -10px !important;
+    background-color: #6BCFB8 !important;
+    color: #333 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #634343;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    z-index: 999 !important;
+    padding: 0 !important;
+}
+
+.cart-count.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* --- MENU --- */
+.lang-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+header .lang-btn {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    height: 36px;
+}
+
+.lang-btn:hover {
+    border-color: #6BCFB8 !important;
+    color: #6BCFB8 !important;
+}
+
+.lang-btn img {
+    width: 20px;
+    border-radius: 2px;
+}
+
+.lang-list {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: #fff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    border: none;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    pointer-events: none;
+    min-width: 140px;
+    padding: 5px 0;
+    list-style: none;
+}
+
+.lang-dropdown:hover .lang-list,
+.lang-dropdown.active .lang-list {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.lang-list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.lang-list a:hover {
+    background-color: #FFFBF2;
+    color: #6BCFB8;
+}
+
+.user-dropdown-menu {
+    width: 290px !important;
+    padding: 0;
+    background: #fff;
+    border-radius: 12px;
+    overflow: visible !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    margin-top: 15px;
+    pointer-events: none;
+}
+
+.user-menu-container:hover .user-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.user-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: transparent;
+    display: block;
+    z-index: 1;
+}
+
+.user-drop-header {
+    background-color: #fff !important;
+    padding: 15px 25px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #000 !important;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.user-drop-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: 12px 25px !important;
+    color: #000 !important;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+    transition: all 0.3s ease !important;
+    border-left: 4px solid transparent;
+    text-decoration: none !important;
+}
+
+.user-drop-link:hover {
+    background-color: #f9f9f9 !important;
+    color: #000 !important;
+    border-left-color: #6BCFB8;
+}
+
+.user-drop-link:hover i {
+    color: #6BCFB8 !important;
+}
+
+.user-drop-link.logout {
+    border-top: 1px solid #eee;
+    margin-top: 0;
+}
+
+.user-drop-link.logout:hover {
+    background-color: #fff0f0 !important;
+    border-left-color: #e74c3c;
+}
+
+.user-drop-link.logout:hover i {
+    color: #e74c3c !important;
+}
+
+.user-dropdown-menu> :first-child {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.user-dropdown-menu> :last-child {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* --- CART DROPDOWN (MINI) --- */
+.cart-dropdown {
+    width: 320px;
+}
+
+.cart-dropdown .cart-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+    background-color: #fff;
+}
+
+.cart-list {
+    max-height: 300px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+}
+
+.cart-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    background: #f0f0f0;
+}
+
+.cart-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cart-item .cart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    border: none;
+    padding: 0;
+    margin-bottom: 4px;
+}
+
+.cart-price {
+    font-size: 13px;
+    color: #E8A6A6;
+    font-weight: 700;
+}
+
+.cart-footer {
+    padding: 15px 20px;
+    background: #fff;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.btn-checkout {
+    width: 100%;
+    background-color: #57bfa3;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-checkout:hover {
+    background-color: #4aa88f;
+}
+
+.cart-empty-msg {
+    padding: 30px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* --- HERO & SLIDER --- */
+main .hero {
+    margin: 30px 0;
+}
+
+.hero .slider-container {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #e0e0e0;
+}
+
+.slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    z-index: 10;
+    transition: 0.3s;
+}
+
+.slider-arrow:hover {
+    background: #fff;
+    color: #6BCFB8;
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+/* --- PRODUCTS GRID & CARD --- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: left;
+}
+
+.product-card .product-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.product-card .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product-card:hover .product-img img {
+    transform: scale(1.05);
+}
+
+.product-details-wrap {
+    padding: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.product-card .product-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    height: 40px;
+    overflow: hidden;
+    color: #333;
+    line-height: 1.3;
+    text-align: left;
+    width: 100%;
+}
+
+.product-card .price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.product-actions {
+    display: grid;
+    grid-template-columns: 1fr 45px;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.btn-buy {
+    background-color: #5AB8A3 !important;
+        /* Основний колір (темніший зелений) */
+        color: #fff !important;
+        /* Білий текст */
+        border: none;
+        border-radius: 12px;
+        /* Заокруглення як в еталоні */
+        font-weight: 700;
+        text-transform: uppercase;
+        /* Великі літери */
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        padding: 12px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(99, 67, 67, 0.15);
+        /* Тінь */
+}
+
+.btn-buy:hover {
+    background-color: #6BCFB8 !important;
+        /* Світліший при наведенні */
+        transform: translateY(-3px);
+        /* Ефект підстрибування */
+        box-shadow: 0 10px 25px rgba(107, 207, 184, 0.3);
+        /* Більша тінь */
+
+}
+
+.btn-fav {
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.btn-fav:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+/* === STYLING RELATED PRODUCTS === */
+.woocommerce ul.products li.product,
+.related.products ul.products li.product {
+    background: #FFFBF2;
+    border-radius: 16px;
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    text-align: left !important;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    width: 25%;
+    margin-bottom: 30px;
+}
+
+.woocommerce ul.products li.product:hover {
+    transform: translateY(-5px);
+}
+
+.woocommerce ul.products li.product img {
+    border-radius: 12px;
+    margin-bottom: 15px !important;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    display: block;
+}
+
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    padding: 0 !important;
+    margin-bottom: 5px !important;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 40px;
+}
+
+.woocommerce ul.products li.product .price {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #2c2c2c !important;
+    margin-bottom: 15px !important;
+    display: block;
+    text-align: left !important;
+}
+/* Кнопка "Додати в кошик" у списках товарів (Каталог, Супутні) */
+.woocommerce ul.products li.product .button {
+    background-color: #5AB8A3 !important;
+    /* Основний зелений колір */
+    color: #fff !important;
+    /* Білий текст */
+    border-radius: 12px !important;
+    /* Заокруглення як в еталоні */
+    font-weight: 700 !important;
+    padding: 12px 15px !important;
+    /* Трохи більше повітря */
+    margin-top: auto;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    /* Рівняємо текст по центру */
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 5px 15px rgba(99, 67, 67, 0.15);
+    /* Тінь */
+    transition: all 0.3s ease;
+    min-height: 45px;
+    /* Фіксована висота для краси */
+}
+
+/* Ефект при наведенні */
+.woocommerce ul.products li.product .button:hover {
+    background-color: #6BCFB8 !important;
+    /* Світліший зелений */
+    transform: translateY(-3px);
+    /* Підстрибування */
+    box-shadow: 0 10px 25px rgba(107, 207, 184, 0.3);
+    color: #fff !important;
+}
+
+/* Іконка завантаження (коли натиснули) */
+.woocommerce ul.products li.product .button.loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+/* --- AUTH PAGE --- */
+.auth-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #634343;
+    margin-bottom: 10px;
+}
+
+.sub-title {
+    color: #888;
+    margin-bottom: 40px;
+}
+
+.auth-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.auth-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(99, 67, 67, 0.08);
+    flex: 1;
+    text-align: left;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-5px);
+}
+
+.auth-card h3 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.input-wrap {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-wrap input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    background: #fdfdfd;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.input-wrap input:focus {
+    background: #fff;
+    border-color: #6BCFB8;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(107, 207, 184, 0.15);
+}
+
+.input-wrap i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.input-wrap input:focus+i {
+    color: #6BCFB8;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-auth:active {
+    transform: scale(0.98);
+}
+
+.btn-login {
+    background-color: #333;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #000;
+}
+
+.btn-register {
+    background-color: #6BCFB8;
+    color: #2c2c2c;
+}
+
+.btn-register:hover {
+    background-color: #5ab8a3;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    color: #ccc;
+    font-size: 12px;
+    font-weight: bold;
+    align-self: center;
+}
+
+.auth-divider span {
+    background: #eee;
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: #888;
+}
+
+/* --- MY ACCOUNT --- */
+.account-dashboard-wrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+.dashboard-header {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 40px;
+    border: 1px solid #f0f0f0;
+}
+
+.user-avatar {
+    width: 70px;
+    height: 70px;
+    background: #6BCFB8;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.section-title-small {
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card:hover {
+    border-color: #6BCFB8;
+    box-shadow: 0 5px 15px rgba(107, 207, 184, 0.15);
+    transform: translateY(-3px);
+}
+
+.ord-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #888;
+}
+
+.ord-num {
+    color: #333;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.ord-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f9f9f9;
+    padding-top: 15px;
+}
+
+.ord-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+.ord-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.st-green {
+    background: #e8f8f5;
+    color: #27ae60;
+}
+
+.st-red {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.st-gray {
+    background: #f3f4f6;
+    color: #7f8c8d;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+/* --- MODAL WINDOWS --- */
+.custom-modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.custom-modal-overlay.open {
+    display: flex !important;
+    opacity: 1;
+}
+
+.custom-modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.custom-modal-overlay.open .custom-modal-content {
+    transform: translateY(0);
+}
+
+.mod-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.mod-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #634343;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.close-modal-btn {
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+    padding: 0;
+}
+
+.close-modal-btn:hover {
+    color: #e74c3c;
+}
+
+#fav-list-container {
+    padding: 10px 0;
+}
+
+#fav-list-container>div {
+    padding: 15px 30px !important;
+    transition: background 0.2s;
+    border-bottom: 1px dashed #eee;
+}
+
+#fav-list-container>div:hover {
+    background-color: #f9f9f9;
+}
+
+.fav-count-badge {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fav-count-badge.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.mod-body {
+    padding: 25px 30px !important;
+    background-color: #fff;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.mod-body strong,
+.mod-body b {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #634343;
+    font-size: 16px;
+    font-weight: 800;
+    border-bottom: 1px solid #E8A6A6;
+    padding-bottom: 5px;
+}
+
+.mod-body>strong:first-child,
+.mod-body>b:first-child {
+    margin-top: 0 !important;
+}
+
+.mod-body address,
+.mod-body p,
+.mod-body div {
+    font-style: normal;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.mod-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mod-body ul li {
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.woocommerce-Price-amount,
+.amount {
+    font-weight: 700;
+    color: #333;
+}
+
+.mod-body strong:last-of-type {
+    font-size: 22px !important;
+    color: #6BCFB8 !important;
+    text-align: right;
+    margin-top: 25px;
+    border-bottom: none !important;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+#secondary,
+#sidebar,
+.widget-area {
+    display: none !important;
+}
+
+#primary,
+.content-area,
+.site-main {
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+    float: none !important;
+}
+
+/* --- PRODUCT PAGE --- */
+.woocommerce div.product {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    margin-top: 40px;
+    background: transparent;
+}
+
+.woocommerce div.product div.images {
+    flex: 1;
+    min-width: 350px;
+    width: 50% !important;
+    float: none !important;
+    margin-bottom: 0 !important;
+}
+
+.woocommerce div.product div.images img {
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(99, 67, 67, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.woocommerce div.product div.images img:hover {
+    transform: scale(1.02);
+}
+
+.woocommerce div.product div.summary {
+    flex: 1;
+    min-width: 350px;
+    width: 45% !important;
+    float: none !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    padding-top: 0 !important;
+}
+
+.product_title {
+    font-size: 38px !important;
+    font-weight: 800 !important;
+    color: #333333 !important;
+    margin-bottom: 15px !important;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.price {
+    font-size: 28px !important;
+    color: #6BCFB8 !important;
+    font-weight: 700;
+    margin-bottom: 30px !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+.woocommerce div.product form.cart {
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 15px !important;
+    margin-bottom: 40px !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.woocommerce div.product button.single_add_to_cart_button {
+    flex-grow: 1;
+    max-width: 300px;
+    height: 55px !important;
+    background-color: #5AB8A3 !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none !important;
+    margin: 0 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 10px 20px rgba(99, 67, 67, 0.2);
+}
+
+.woocommerce div.product button.single_add_to_cart_button:hover {
+    background-color: #6BCFB8 !important;
+    color: #fff !important;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(107, 207, 184, 0.4);
+}
+
+.product_meta {
+    display: none !important;
+}
+
+.product_meta a {
+    color: #634343;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* --- TABS --- */
+.woocommerce-tabs {
+    clear: both !important;
+    width: 100% !important;
+    padding-top: 50px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    margin-top: 50px;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs {
+    display: none !important;
+}
+
+.woocommerce-tabs {
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 20px !important;
+}
+
+.woocommerce-Tabs-panel--description h2,
+.woocommerce-Tabs-panel--description h3 {
+    display: none !important;
+}
+
+.woocommerce-Tabs-panel {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+    text-align: left;
+}
+
+/* --- SLIDER --- */
+.custom-product-slider {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #fdfdfd;
+    box-shadow: 0 15px 40px rgba(99, 67, 67, 0.1);
+}
+
+.slider-inner {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+}
+
+.slide-item {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 20px;
+    box-shadow: none !important;
+}
+
+.p-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    color: #6BCFB8;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.custom-product-slider:hover .p-arrow {
+    opacity: 1;
+}
+
+.p-arrow:hover {
+    background: #fff;
+    color: #4aa88f;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.p-prev {
+    left: 15px;
+}
+
+.p-next {
+    right: 15px;
+}
+
+/* =========================================
+   CART PAGE STYLES (DESKTOP)
+   ========================================= */
+
+.woocommerce-cart .woocommerce {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.woocommerce-message {
+    display: none !important;
+}
+
+button[name='update_cart'] {
+    display: none !important;
+}
+
+/* 1. TABLE STRUCTURE - CLEAN & TRANSPARENT */
+.woocommerce-cart .shop_table {
+    background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        border-collapse: collapse !important;
+        width: 100%;
+}
+
+/* 1. TABLE STRUCTURE - CLEAN & TRANSPARENT */
+.woocommerce-cart .shop_table {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border-collapse: collapse !important;
+    width: 100%;
+}
+
+.woocommerce-cart .shop_table tr {
+    border-bottom: none !important;
+}
+
+.woocommerce-cart .shop_table th {
+    background: transparent !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #999;
+    padding: 15px 0 !important;
+    text-align: left !important;
+    border: none !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.woocommerce-cart .shop_table td {
+    background: transparent !important;
+    border-top: none !important;
+    padding: 20px 0 !important;
+    vertical-align: middle;
+    text-align: left !important;
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    /* Лінія під товаром */
+}
+
+/* ОСЬ ЦЕ НОВЕ ПРАВИЛО: */
+.woocommerce-cart .shop_table tr:last-child td {
+    border-bottom: none !important;
+    /* Прибирає лінію під останнім елементом */
+}
+
+.woocommerce-cart .shop_table th {
+    background: transparent !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #999;
+    padding: 15px 0 !important;
+    text-align: left !important;
+}
+
+.woocommerce-cart .shop_table td {
+    background: transparent !important;
+    border-top: none !important;
+    padding: 20px 0 !important;
+    vertical-align: middle;
+    text-align: left !important;
+}
+
+/* 2. PRODUCT IMAGE (SQUARE 80x80) */
+.woocommerce-cart .shop_table td.product-thumbnail {
+    width: 90px;
+    padding-right: 20px !important;
+}
+
+.woocommerce-cart .shop_table td.product-thumbnail img {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 12px;
+    object-fit: cover !important;
+    aspect-ratio: 1/1;
+    display: block;
+    background-color: #f5f5f5;
+}
+
+/* 3. PRODUCT NAME */
+.woocommerce-cart .shop_table td.product-name a {
+    color: #333;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: left;
+    display: block;
+}
+
+/* 4. REMOVE BUTTON (X) */
+.woocommerce-cart .shop_table td.product-remove {
+    width: 40px;
+    text-align: center;
+}
+
+.woocommerce-cart .shop_table td.product-remove a.remove {
+    color: #ccc !important;
+    background: transparent !important;
+    border: none !important;
+    font-size: 24px;
+    font-weight: 400;
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.woocommerce-cart .shop_table td.product-remove a.remove:hover {
+    color: #e74c3c !important;
+    background-color: #fff0f0 !important;
+}
+
+/* 5. QUANTITY (+/- BUTTONS - GLOBAL - COMPACT) */
+.quantity-wrapper {
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 32px;
+    width: auto;
+    margin: 0;
+    z-index: 5;
+    position: relative;
+}
+
+.quantity-wrapper button {
+    width: 28px;
+    height: 100%;
+    background: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+.quantity-wrapper button:hover {
+    background-color: #f9f9f9;
+}
+
+.quantity-wrapper input.qty {
+    width: 35px !important;
+    height: 100% !important;
+    border: none !important;
+    border-left: 1px solid #eee !important;
+    border-right: 1px solid #eee !important;
+    border-radius: 0 !important;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fff !important;
+    -moz-appearance: textfield;
+}
+
+.quantity-wrapper input.qty::-webkit-outer-spin-button,
+.quantity-wrapper input.qty::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Product Page Quantity (Separate style) */
+.woocommerce div.product .quantity .qty {
+    width: 60px !important;
+    height: 50px !important;
+    border: 2px solid #eee !important;
+    border-radius: 12px !important;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 700;
+    color: #333 !important;
+    background: #fff !important;
+}
+
+/* 7. TOTALS */
+.cart-collaterals {
+    margin-top: 40px !important;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cart_totals {
+    width: 100% !important;
+    max-width: 400px;
+}
+
+.cart_totals table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart_totals table th {
+    text-align: left;
+    padding: 15px 0;
+    font-weight: 600;
+    color: #777;
+    border: none !important;
+}
+
+.cart_totals table td {
+    text-align: right;
+    padding: 15px 0;
+    font-weight: 700;
+    color: #333;
+    border: none !important;
+}
+
+.cart_totals table tr {
+    border-bottom: 1px solid #eee;
+}
+
+.cart_totals table tr:last-child {
+    border-bottom: none;
+}
+
+/* Hide duplicate subtotal */
+.cart_totals tr.cart-subtotal {
+    display: none !important;
+}
+
+.cart_totals tr.order-total td .amount {
+    font-size: 22px;
+    color: #333;
+}
+
+/* Hide shipping in cart (shows at checkout) */
+.cart_totals tr.shipping,
+.cart_totals .woocommerce-shipping-calculator {
+    display: none !important;
+}
+
+/* CHECKOUT BUTTON */
+.wc-proceed-to-checkout {
+    margin-top: 25px;
+}
+
+.wc-proceed-to-checkout a.checkout-button {
+    background-color: #5AB8A3 !important;
+    /* Було #634343, стало зеленим */
+    color: #fff !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 18px 30px !important;
+    border-radius: 12px !important;
+    width: 100%;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(99, 67, 67, 0.15);
+    transition: all 0.3s ease;
+}
+
+.wc-proceed-to-checkout a.checkout-button:hover {
+    background-color: #6BCFB8 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(107, 207, 184, 0.4);
+}
+/* =========================================
+   CHECKOUT PAGE: RESET & BLACK PRICES (FIX)
+   ========================================= */
+
+/* Забираємо дизайн картки з підсумку (щоб було "як було") */
+.checkout-summary-col,
+#order_review,
+.woocommerce-checkout-review-order-table {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* Прибираємо границі у таблиці огляду замовлення */
+.woocommerce-checkout-review-order-table th,
+.woocommerce-checkout-review-order-table td {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eee !important;
+    /* Тільки знизу легка лінія */
+}
+
+/* ПРИМУСОВО ЧОРНИЙ КОЛІР ДЛЯ ВСІХ ЦІН НА ЧЕКАУТІ */
+.woocommerce-checkout .amount,
+.woocommerce-checkout .product-total,
+.woocommerce-checkout .order-total .amount,
+.wc-block-components-order-summary-item__total-price,
+.wc-block-components-totals-item__value {
+    color: #2c2c2c !important;
+    /* ЧОРНИЙ! */
+    font-weight: 700 !important;
+}
+
+/* Заголовки (Товар, Підсумок) - сірі */
+.woocommerce-checkout-review-order-table th {
+    color: #777 !important;
+    font-weight: 500 !important;
+}
+
+/* =========================================
+   MOBILE ADAPTATION FOR CART (GRID SYSTEM - FIXED)
+   ========================================= */
+@media (max-width: 768px) {
+
+    header .logo {
+        font-size: 22px;
+    }
+
+    .header-icons,
+    .header-controls {
+        gap: 15px;
+    }
+
+    header .lang-btn span {
+        display: none;
+    }
+
+    /* --- PAGE: PRODUCT --- */
+    .woocommerce div.product {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .woocommerce div.product div.images {
+        width: 100% !important;
+        float: none !important;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .woocommerce div.product div.images img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+        border-radius: 12px;
+        box-shadow: none !important;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .woocommerce div.product div.summary {
+        width: 100% !important;
+        float: none !important;
+        text-align: left;
+    }
+
+    .product_title {
+        font-size: 24px !important;
+        margin-bottom: 10px !important;
+        color: #333 !important;
+    }
+
+    .price {
+        font-size: 22px !important;
+        color: #333 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .woocommerce div.product button.single_add_to_cart_button {
+        width: 100%;
+        height: 50px !important;
+        background-color: #6BCFB8 !important;
+        color: #fff !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        border: none !important;
+    }
+
+    .woocommerce div.product button.single_add_to_cart_button:hover {
+        background-color: #5ab8a3 !important;
+    }
+
+    .woocommerce-Tabs-panel--description {
+        color: #333 !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* --- CART GRID (MOBILE) --- */
+    .woocommerce-cart .shop_table thead {
+        display: none !important;
+    }
+
+    /* СІТКА КАРТКИ - НОВА СТРУКТУРА */
+    .woocommerce-cart .shop_table tr.cart_item {
+        display: grid !important;
+        grid-template-columns: 80px 1fr 30px !important;
+        /* Фото | Інфо | Кнопка */
+        grid-template-rows: auto auto;
+        /* Назва | (Кількість + Ціна) */
+        column-gap: 15px;
+        row-gap: 5px;
+        align-items: start;
+        padding: 15px 0 !important;
+        border-bottom: 1px solid #eee !important;
+        margin-bottom: 0;
+        background: transparent !important;
+        position: relative;
+    }
+
+    .woocommerce-cart .shop_table td {
+        display: block !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    .woocommerce-cart .shop_table td::before {
+        display: none !important;
+    }
+
+    /* 1. ФОТО (Ліва колонка, на 2 рядки) */
+    .woocommerce-cart .shop_table td.product-thumbnail {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        width: 100%;
+        padding: 0 !important;
+    }
+
+    .woocommerce-cart .shop_table td.product-thumbnail img {
+        width: 80px !important;
+        height: 80px !important;
+        border-radius: 8px;
+        object-fit: cover !important;
+        aspect-ratio: 1/1;
+        display: block !important;
+        background-color: #eee;
+        margin: 0;
+    }
+
+    /* 2. НАЗВА (Верхній рядок, центр) */
+    .woocommerce-cart .shop_table td.product-name {
+        grid-column: 2;
+        grid-row: 1;
+        padding-right: 10px !important;
+        text-align: left !important;
+        align-self: flex-start;
+        margin-bottom: 0;
+    }
+
+    .woocommerce-cart .shop_table td.product-name a {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+        text-decoration: none;
+        line-height: 1.3;
+        display: block;
+        text-align: left !important;
+    }
+
+    /* 3. КІЛЬКІСТЬ (Нижній рядок, зліва) */
+    .woocommerce-cart .shop_table td.product-quantity {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex !important;
+        justify-content: flex-start;
+        align-items: center;
+        text-align: left !important;
+        margin-top: 5px;
+        z-index: 10;
+        /* Піднімаємо вище, щоб працював клік */
+        position: relative;
+    }
+
+    /* 4. СУМА (Нижній рядок, справа від кількості) */
+    .woocommerce-cart .shop_table td.product-subtotal {
+        grid-column: 2;
+        grid-row: 2;
+        display: block !important;
+        text-align: right !important;
+        /* Ціна праворуч, але в межах колонки */
+        align-self: center;
+        margin-top: 5px;
+    }
+
+    .woocommerce-cart .shop_table td.product-subtotal .amount {
+        font-size: 15px;
+        font-weight: 700;
+        color: #333;
+        margin-left: 10px;
+    }
+
+    /* Ховаємо ціну за одиницю */
+    .woocommerce-cart .shop_table td.product-price {
+        display: none !important;
+    }
+
+    /* 5. ХРЕСТИК (Верхній правий кут) */
+    .woocommerce-cart .shop_table td.product-remove {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        align-self: start;
+        text-align: right !important;
+        padding: 0 !important;
+        z-index: 10;
+    }
+
+    .woocommerce-cart .shop_table td.product-remove a.remove {
+        color: #aaa !important;
+        font-size: 20px;
+        font-weight: 400;
+        background: transparent !important;
+        border: none !important;
+        line-height: 1;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .woocommerce-cart .shop_table td.product-remove a.remove:hover {
+        color: #e74c3c !important;
+    }
+
+    /* Підсумки кошика */
+    .cart_totals {
+        width: 100% !important;
+        text-align: right;
+        padding-top: 10px !important;
+    }
+
+    .cart_totals tr.order-total th {
+        font-size: 16px;
+        font-weight: 400;
+        text-align: left !important;
+    }
+
+    .cart_totals tr.order-total td .amount {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: right !important;
+    }
+
+    /* --- CHECKOUT RESET --- */
+    .woocommerce-checkout .shop_table,
+    .woocommerce-checkout .shop_table tbody {
+        display: table !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    .woocommerce-checkout .shop_table tr {
+        display: table-row !important;
+        background: transparent !important;
+        border-bottom: 1px solid #e5e5e5 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    .woocommerce-checkout .shop_table td,
+    .woocommerce-checkout .shop_table th {
+        display: table-cell !important;
+        width: auto !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 15px 0 !important;
+        text-align: right !important;
+    }
+
+    .woocommerce-checkout .shop_table td.product-name {
+        text-align: left !important;
+        font-weight: 600;
+        padding-right: 10px !important;
+    }
+
+    .woocommerce-checkout #order_review_heading {
+        display: block !important;
+    }
+
+    .woocommerce-checkout-review-order-table-toggle {
+        display: block !important;
+    }
+
+    .woocommerce-checkout .amount {
+        color: #333 !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Інше */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .product-actions {
+        grid-template-columns: 1fr 40px;
+    }
+
+    .btn-buy {
+        font-size: 13px;
+    }
+
+    .checkout-layout {
+        flex-direction: column-reverse;
+    }
+
+    .checkout-summary-col {
+        width: 100%;
+        position: static;
+    }
+
+    .woocommerce div.product {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .woocommerce div.product div.images,
+    .woocommerce div.product div.summary {
+        width: 100% !important;
+    }
+
+    .woocommerce div.product button.single_add_to_cart_button {
+        width: 100%;
+        height: 50px !important;
+    }
+
+    .auth-cards-container {
+        flex-direction: column;
+    }
+
+    /* Мобільна адаптація футера */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contact-col,
+    .social-col {
+        text-align: center;
+    }
+
+    .social-link {
+        justify-content: center;
+    }
+
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+    }
+
+        /* === STYLING RELATED PRODUCTS === */
+        .woocommerce ul.products li.product,
+        .related.products ul.products li.product {
+            background: #FFFBF2;
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            text-align: left !important;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            width: 50%;
+            margin-bottom: 30px;
+        }
+    
+        .woocommerce ul.products li.product:hover {
+            transform: translateY(-5px);
+        }
+    
+        .woocommerce ul.products li.product img {
+            border-radius: 12px;
+            margin-bottom: 15px !important;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: block;
+        }
+    
+        .woocommerce ul.products li.product .woocommerce-loop-product__title {
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            padding: 0 !important;
+            margin-bottom: 5px !important;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 40px;
+        }
+    
+        .woocommerce ul.products li.product .price {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: #2c2c2c !important;
+            margin-bottom: 15px !important;
+            display: block;
+            text-align: left !important;
+        }
+}
+
+/* --- FOOTER & MISC (ЦЕ МАЄ БУТИ В САМОМУ КІНЦІ ФАЙЛУ) --- */
+footer.site-footer {
+    display: block !important;
+    width: 100%;
+    margin-top: 50px;
+    background-color: #634343;
+    color: #fff;
+    padding-top: 30px;
+    border-top: 4px solid #E8A6A6;
+    clear: both;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 50px;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Права колонка - соцмережі */
+.social-col {
+    text-align: right;
+}
+
+/* Ліва колонка - контакти */
+.contact-col {
+    text-align: left;
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    /* Білий заголовок */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-col h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #6BCFB8;
+}
+
+/* Для правої колонки лінію теж праворуч */
+.social-col h4::after {
+    left: auto;
+    right: 0;
+}
+
+.footer-col p {
+    font-size: 15px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #fff;
+    /* Білий текст */
+}
+
+.footer-col a {
+    color: #fff !important;
+    /* Білі посилання */
+    text-decoration: none !important;
+    /* Без підкреслення */
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.footer-col a:hover {
+    color: #6BCFB8 !important;
+    transform: translateX(5px);
+}
+
+.footer-col2 {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Права колонка - соцмережі */
+.social-col2 {
+    text-align: right;
+}
+
+/* Ліва колонка - контакти */
+.contact-col {
+    text-align: left;
+}
+
+.footer-col2 h4 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    /* Білий заголовок */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-col2 h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #6BCFB8;
+}
+
+/* Для правої колонки лінію теж праворуч */
+.social-col h4::after {
+    left: 100% !important;
+        /* Чим більше %, тим правіше */
+        /* Можна спробувати 65% або 70%, якщо мало */
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: 40px !important;
+        height: 2px !important;
+        bottom: 0 !important;
+        background-color: #6BCFB8 !important;
+        position: absolute;
+}
+
+.footer-col2 p {
+    font-size: 15px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #fff;
+    /* Білий текст */
+}
+
+.footer-col2 a {
+    color: #fff !important;
+    /* Білі посилання */
+    text-decoration: none !important;
+    /* Без підкреслення */
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.footer-col2 a:hover {
+    color: #6BCFB8 !important;
+    transform: translateX(5px);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: flex-end;
+    /* Вирівнювання вправо для соцмереж */
+}
+
+.social-link i {
+    font-size: 20px;
+    width: 30px;
+    text-align: center;
+    color: #fff;
+    /* Білі іконки */
+    transition: transform 0.3s;
+}
+
+.social-link:hover i {
+    color: #6BCFB8;
+    transform: scale(1.2);
+}
+
+.copyright-bar {
+    background-color: #4e3434;
+    text-align: center;
+    padding: 5px;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.woocommerce-order-received .woocommerce-customer-details .woocommerce-column--billing-address {
+    display: none !important;
+}
+
+/* =========================================
+   ВИПРАВЛЕННЯ ДЛЯ WOOCOMMERCE BLOCKS (ЧЕКАУТ - ФІНАЛ)
+   ========================================= */
+
+/* 1. ПРИХОВУЄМО НЕПОТРІБНІ РЯДКИ (Subtotal, Shipping) */
+.wc-block-components-totals-item.wc-block-components-totals-item--subtotal,
+.wc-block-components-totals-item.wc-block-components-totals-item--shipping,
+.wc-block-components-totals-shipping {
+    display: none !important;
+}
+
+/* 2. ПРИХОВУЄМО ДУБЛІ ЦІНИ ТА МЕТАДАНІ */
+.wc-block-components-product-price,
+.wc-block-components-product-metadata,
+.wc-block-components-product-details {
+    display: none !important;
+}
+
+/* 3. НАЛАШТУВАННЯ ТОВАРНОГО РЯДКА (Назва зліва, Ціна справа) */
+.wc-block-components-order-summary-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 5px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.wc-block-components-order-summary-item__image {
+    margin-right: 8px !important;
+    /* Маленький відступ від фото до назви */
+    padding-right: 0 !important;
+    flex: 0 0 60px !important;
+    width: 60px !important;
+}
+
+/* Контейнер для тексту (назва + ціна) */
+.wc-block-components-order-summary-item__content {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Обнуляємо відступи у контейнера опису, щоб назва "прилипла" вліво */
+.wc-block-components-order-summary-item__description {
+    margin-right: auto !important;
+    /* Штовхає ціну вправо */
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    text-align: left !important;
+    flex-grow: 1 !important;
+}
+
+/* Сама назва */
+.wc-block-components-product-name {
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    color: #333 !important;
+    text-align: left !important;
+    margin: 0 !important;
+}
+
+/* Ціна */
+.wc-block-components-order-summary-item__total-price {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #2c2c2c !important;
+    white-space: nowrap !important;
+}
+/* =========================================
+   ВИПРАВЛЕННЯ ІКОНОК У МЕНЮ ПРОФІЛЮ (FINAL)
+   ========================================= */
+
+/* Налаштування контейнера кнопки (рівняємо текст і іконку) */
+.user-dropdown-menu .user-drop-link {
+    display: flex !important;
+    align-items: center !important;
+    /* Центрує по вертикалі */
+    gap: 12px !important;
+    /* Відступ між іконкою та текстом */
+    padding: 12px 25px !important;
+    /* Комфортні відступи */
+}
+
+/* Налаштування самої іконки */
+.user-dropdown-menu .user-drop-link i {
+    color: #333333 !important;
+    /* Темний колір */
+    font-size: 18px !important;
+    /* Зменшений розмір (було 24px) */
+    width: 20px !important;
+    /* Фіксована ширина, щоб текст був рівно */
+    height: auto !important;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    /* Прибираємо зайві відступи */
+    line-height: 1 !important;
+}
+
+/* При наведенні мишки на пункт меню - іконка зелена */
+.user-dropdown-menu .user-drop-link:hover i {
+    color: #6BCFB8 !important;
+}
+
+/* Кнопка виходу (червона при наведенні) */
+.user-dropdown-menu .user-drop-link.logout:hover i {
+    color: #e74c3c !important;
+}
+
+/* РОБИМО СТРІЛКИ СЛАЙДЕРА ВИДИМИМИ НА МОБІЛЬНИХ */
+@media (max-width: 768px) {
+    .p-arrow {
+        opacity: 1 !important;
+        /* Завжди показувати */
+        background: rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* =========================================
+   СТОРІНКА "ДЯКУЄМО ЗА ЗАМОВЛЕННЯ" (MODERN THANK YOU PAGE)
+   ========================================= */
+
+/* 1. Загальний контейнер - робимо як "Картку" */
+.woocommerce-order {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(99, 67, 67, 0.08);
+    /* М'яка тінь */
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    text-align: center;
+    /* Центруємо вміст */
+}
+
+/* 2. Повідомлення "Дякуємо" */
+.woocommerce-order>p.woocommerce-notice {
+    font-size: 24px;
+    font-weight: 800;
+    color: #6BCFB8;
+    /* Ваш зелений */
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Додаємо велику галочку зверху */
+.woocommerce-order>p.woocommerce-notice::before {
+    content: "\f00c";
+    /* FontAwesome Check Icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 50px;
+    width: 90px;
+    height: 90px;
+    background: #e8f8f5;
+    /* Світло-зелене коло */
+    color: #6BCFB8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* 3. Список даних замовлення (Номер, дата, email) */
+ul.order_details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 20px 0;
+    margin: 0 0 40px 0;
+    border-top: 1px dashed #eee;
+    border-bottom: 1px dashed #eee;
+}
+
+ul.order_details li {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #888;
+    border-right: none !important;
+    padding: 0 15px;
+    margin: 0;
+    float: none !important;
+}
+
+ul.order_details li strong {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+    margin-top: 5px;
+    text-transform: none;
+}
+
+/* 4. Заголовки секцій (Деталі замовлення, Адреса) */
+.woocommerce-order h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #634343;
+    /* Ваш коричневий */
+    margin-bottom: 20px;
+    text-align: left;
+    /* Заголовки зліва */
+    border-left: 4px solid #6BCFB8;
+    padding-left: 15px;
+}
+
+/* 5. Таблиця замовлення */
+.woocommerce-table--order-details {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.woocommerce-table--order-details th,
+.woocommerce-table--order-details td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.woocommerce-table--order-details th {
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.woocommerce-table--order-details td {
+    color: #333;
+    font-weight: 600;
+}
+
+.woocommerce-table--order-details tr:last-child td {
+    border-bottom: none;
+}
+
+/* Посилання на товар */
+.woocommerce-table--order-details a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* 6. Підсумки (Total, Tax) */
+.woocommerce-table--order-details tfoot th {
+    text-align: right;
+    width: 60%;
+}
+
+.woocommerce-table--order-details tfoot td {
+    text-align: right;
+}
+
+.woocommerce-table--order-details tfoot tr:last-child th,
+.woocommerce-table--order-details tfoot tr:last-child td {
+    color: #6BCFB8;
+    font-size: 18px;
+    font-weight: 800;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+
+/* 7. Адреса */
+.woocommerce-customer-details address {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    font-style: normal;
+    background: #fdfdfd;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Мобільна адаптація */
+@media (max-width: 768px) {
+    .woocommerce-order {
+        padding: 20px;
+        margin: 20px 10px;
+    }
+
+    ul.order_details {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    ul.order_details li {
+        border-bottom: 1px solid #f9f9f9;
+        padding-bottom: 10px;
+    }
+}
+
+/* =========================================
+   COOKIE BANNER (Vlavasta Design)
+   ========================================= */
+
+/* 1. Контейнер банера */
+.cky-consent-container {
+    background-color: #ffffff !important;
+    /* Білий фон */
+    border: 1px solid #eee !important;
+    border-radius: 16px !important;
+    /* Заокруглення */
+    box-shadow: 0 10px 40px rgba(99, 67, 67, 0.1) !important;
+    /* Тінь */
+    bottom: 20px !important;
+    left: 20px !important;
+    max-width: 400px !important;
+    /* Компактний віджет зліва */
+}
+
+/* 2. Заголовок */
+p.cky-title {
+    color: #634343 !important;
+    /* Коричневий */
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+}
+
+/* 3. Текст */
+.cky-notice-descripton {
+    color: #555555 !important;
+    font-family: "Montserrat", sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+}
+
+/* 4. Кнопка "Прийняти все" (Зелена) */
+button.cky-btn-accept {
+    background-color: #6BCFB8 !important;
+    border-color: #6BCFB8 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+button.cky-btn-accept:hover {
+    background-color: #5ab8a3 !important;
+    transform: translateY(-2px);
+}
+
+/* 5. Кнопка "Налаштувати" / "Відхилити" (Прозора) */
+button.cky-btn-customize,
+button.cky-btn-reject {
+    color: #888888 !important;
+    border: 1px solid #eee !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+}
+
+button.cky-btn-customize:hover,
+button.cky-btn-reject:hover {
+    border-color: #634343 !important;
+    color: #634343 !important;
+}
+
+/* 6. Іконка (кукі) зліва внизу (Revisit consent) */
+.cky-revisit-bottom-left {
+    background-color: #6BCFB8 !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================================
+   Vlavasta: Clean Cart Button (No Animation)
+   ========================================= */
+
+/* 1. Прибрати напис "Zobacz koszyk" (View cart) */
+a.added_to_cart {
+    display: none !important;
+}
+
+/* 2. Прибрати галочку після додавання */
+/* Для кнопок у каталозі */
+.woocommerce ul.products li.product .button.added::after,
+.woocommerce ul.products li.product .button.added i {
+    display: none !important;
+    content: none !important;
+}
+
+/* Щоб іконка кошика не зникала (якщо вона була) */
+.woocommerce ul.products li.product .button.added .astra-icons {
+    display: inline-block !important;
+}
+
+/* 3. Прибрати анімацію завантаження (спінер) */
+.woocommerce ul.products li.product .button.loading {
+    opacity: 1 !important;
+    /* Кнопка не стає напівпрозорою */
+    padding-right: 10px !important;
+    /* Не зсувається текст */
+}
+
+.woocommerce ul.products li.product .button.loading::after {
+    display: none !important;
+    /* Ховаємо сам спінер */
+}
+
+/* =========================================
+   MOBILE FIX: THANK YOU PAGE (Compact & Clean)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* 1. Зменшуємо відступи контейнера */
+    .woocommerce-order {
+        padding: 25px 20px !important;
+        margin: 20px 15px !important;
+        border-radius: 16px !important;
+    }
+
+    /* 2. Зменшуємо величезну галочку */
+    .woocommerce-order>p.woocommerce-notice::before {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 30px !important;
+        /* Менша іконка */
+        margin-bottom: 15px !important;
+    }
+
+    .woocommerce-order>p.woocommerce-notice {
+        font-size: 20px !important;
+        /* Менший заголовок */
+        margin-bottom: 20px !important;
+    }
+
+    /* 3. Переробляємо список деталей (Номер, Дата...) в табличний вигляд */
+    ul.order_details {
+        display: flex !important;
+        flex-direction: column !important;
+        background: #f9f9f9 !important;
+        /* Світло-сірий фон */
+        border-radius: 12px !important;
+        padding: 0 15px !important;
+        margin: 0 0 30px 0 !important;
+        border: 1px solid #eee !important;
+        gap: 0 !important;
+    }
+
+    ul.order_details li {
+        display: flex !important;
+        justify-content: space-between !important;
+        /* Назва зліва, Значення справа */
+        align-items: center !important;
+        width: 100% !important;
+        padding: 15px 0 !important;
+        border-bottom: 1px solid #eee !important;
+        border-right: none !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    ul.order_details li:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Стиль для назви (зліва) - дрібний сірий текст */
+    ul.order_details li {
+        font-size: 13px !important;
+        color: #777 !important;
+        text-transform: none !important;
+        /* Прибираємо капс, щоб не кричало */
+    }
+
+    /* Стиль для значення (справа) - жирний темний текст */
+    ul.order_details li strong {
+        display: block !important;
+        margin-top: 0 !important;
+        font-size: 14px !important;
+        color: #333 !important;
+        text-align: right !important;
+        max-width: 60%;
+        /* Щоб довгі мейли не ламали верстку */
+        word-wrap: break-word;
+    }
+
+    /* 4. Виправляємо таблицю товарів знизу (якщо вона є) */
+    .woocommerce-table--order-details {
+        border: none !important;
+    }
+
+    .woocommerce-table--order-details thead {
+        display: none !important;
+        /* Ховаємо шапку таблиці */
+    }
+
+    .woocommerce-table--order-details tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+    }
+
+    .woocommerce-table--order-details td {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0 !important;
+        border: none !important;
+        text-align: right !important;
+    }
+
+    /* Додаємо підписи до значень у таблиці */
+    .woocommerce-table--order-details td::before {
+        content: attr(data-title);
+        float: left;
+        font-weight: 600;
+        color: #777;
+    }
+}
